@@ -3,10 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>News Aggregator</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        header {
+            background: #111;
+            color: white;
+            padding: 20px;
+        }
+
+        .header-content {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .tagline {
+            margin-top: 6px;
+            color: #bbb;
+        }
+
+        nav {
+            background: white;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .nav-content {
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            gap: 25px;
+            padding: 14px 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .welcome {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .welcome h1 {
+            margin-bottom: 10px;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .card h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        footer {
+            margin-top: 50px;
+            padding: 25px;
+            background: #111;
+            color: #aaa;
+            text-align: center;
+        }
+
+        @media (max-width: 700px) {
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-content {
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    <h1>News Aggregator</h1>
-    <p>Welcome! Our news website is being built.</p>
+
+<header>
+    <div class="header-content">
+        <div class="logo">News Aggregator</div>
+        <div class="tagline">News from multiple sources, in one place.</div>
+    </div>
+</header>
+
+<nav>
+    <div class="nav-content">
+        <a href="#">Home</a>
+        <a href="#">World</a>
+        <a href="#">Politics</a>
+        <a href="#">Business</a>
+        <a href="#">Sports</a>
+        <a href="#">Technology</a>
+    </div>
+</nav>
+
+<main>
+
+    <section class="welcome">
+        <h1>Latest News</h1>
+        <p>Welcome to our news aggregator. News articles will appear here automatically.</p>
+    </section>
+
+    <section class="news-grid">
+
+        <article class="card">
+            <h2>News coming soon</h2>
+            <p>Our first news sources will be connected here.</p>
+        </article>
+
+        <article class="card">
+            <h2>AI summaries</h2>
+            <p>We will later use AI to create short and useful summaries.</p>
+        </article>
+
+        <article class="card">
+            <h2>Multiple sources</h2>
+            <p>The goal is to bring news from different sources into one simple website.</p>
+        </article>
+
+    </section>
+
+</main>
+
+<footer>
+    News Aggregator — First version
+</footer>
+
 </body>
 </html>
