@@ -51,7 +51,7 @@ async function loadEthiopiaNews() {
         const response = await fetch(
             "https://api.rss2json.com/v1/api.json?rss_url=" +
             encodeURIComponent(
-                "https://feeds.bbci.co.uk/news/world/africa/rss.xml"
+                "https://feeds.bbci.co.uk/news/topics/cwlw3xz047jt/rss.xml"
             )
         );
 
