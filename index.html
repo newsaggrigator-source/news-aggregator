@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>News Aggregator</title>
+    <title>Sudan News Hub</title>
 
     <style>
         * {
@@ -15,14 +15,14 @@
 
         body {
             font-family: Arial, sans-serif;
-            background: #f5f5f5;
+            background: #f4f4f4;
             color: #222;
         }
 
         header {
             background: #111;
             color: white;
-            padding: 20px;
+            padding: 25px 20px;
         }
 
         .header-content {
@@ -31,13 +31,14 @@
         }
 
         .logo {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: bold;
         }
 
         .tagline {
-            margin-top: 6px;
+            margin-top: 7px;
             color: #bbb;
+            font-size: 15px;
         }
 
         nav {
@@ -50,13 +51,18 @@
             margin: auto;
             display: flex;
             gap: 25px;
-            padding: 14px 20px;
+            padding: 15px 20px;
+            flex-wrap: wrap;
         }
 
         nav a {
             text-decoration: none;
             color: #333;
             font-weight: bold;
+        }
+
+        nav a:hover {
+            color: #c00;
         }
 
         main {
@@ -73,7 +79,18 @@
         }
 
         .welcome h1 {
+            font-size: 28px;
             margin-bottom: 10px;
+        }
+
+        .welcome p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .section-title {
+            font-size: 24px;
+            margin: 30px 0 15px;
         }
 
         .news-grid {
@@ -99,9 +116,18 @@
             line-height: 1.5;
         }
 
+        .category {
+            display: inline-block;
+            margin-bottom: 12px;
+            font-size: 13px;
+            font-weight: bold;
+            color: #c00;
+            text-transform: uppercase;
+        }
+
         footer {
             margin-top: 50px;
-            padding: 25px;
+            padding: 30px 20px;
             background: #111;
             color: #aaa;
             text-align: center;
@@ -112,9 +138,12 @@
                 grid-template-columns: 1fr;
             }
 
-            .nav-content {
-                gap: 15px;
-                flex-wrap: wrap;
+            .logo {
+                font-size: 26px;
+            }
+
+            .welcome h1 {
+                font-size: 24px;
             }
         }
     </style>
@@ -124,19 +153,21 @@
 
 <header>
     <div class="header-content">
-        <div class="logo">News Aggregator</div>
-        <div class="tagline">News from multiple sources, in one place.</div>
+        <div class="logo">Sudan News Hub</div>
+        <div class="tagline">
+            Sudan, Ethiopia, Somalia and Sudanese football news in one place.
+        </div>
     </div>
 </header>
 
 <nav>
     <div class="nav-content">
         <a href="#">Home</a>
-        <a href="#">World</a>
-        <a href="#">Politics</a>
-        <a href="#">Business</a>
-        <a href="#">Sports</a>
-        <a href="#">Technology</a>
+        <a href="#">Sudan</a>
+        <a href="#">Ethiopia</a>
+        <a href="#">Somalia</a>
+        <a href="#">Sudanese Football</a>
+        <a href="#">Regional</a>
     </div>
 </nav>
 
@@ -144,24 +175,101 @@
 
     <section class="welcome">
         <h1>Latest News</h1>
-        <p>Welcome to our news aggregator. News articles will appear here automatically.</p>
+        <p>
+            Welcome to Sudan News Hub.
+            Our goal is to bring important news from Sudan,
+            Ethiopia and Somalia together in one simple website.
+        </p>
     </section>
+
+    <h2 class="section-title">Sudan</h2>
 
     <section class="news-grid">
 
         <article class="card">
-            <h2>News coming soon</h2>
-            <p>Our first news sources will be connected here.</p>
+            <span class="category">Sudan</span>
+            <h2>Sudan News</h2>
+            <p>
+                The latest important developments and news from Sudan.
+            </p>
         </article>
 
         <article class="card">
-            <h2>AI summaries</h2>
-            <p>We will later use AI to create short and useful summaries.</p>
+            <span class="category">Sudan</span>
+            <h2>Sudanese Society</h2>
+            <p>
+                Stories and developments concerning everyday life in Sudan.
+            </p>
         </article>
 
         <article class="card">
-            <h2>Multiple sources</h2>
-            <p>The goal is to bring news from different sources into one simple website.</p>
+            <span class="category">Sudan</span>
+            <h2>Sudanese Economy</h2>
+            <p>
+                Economic news, business and important developments.
+            </p>
+        </article>
+
+    </section>
+
+
+    <h2 class="section-title">East Africa</h2>
+
+    <section class="news-grid">
+
+        <article class="card">
+            <span class="category">Ethiopia</span>
+            <h2>Ethiopia News</h2>
+            <p>
+                Important news and developments from Ethiopia.
+            </p>
+        </article>
+
+        <article class="card">
+            <span class="category">Somalia</span>
+            <h2>Somalia News</h2>
+            <p>
+                Important news and developments from Somalia.
+            </p>
+        </article>
+
+        <article class="card">
+            <span class="category">Regional</span>
+            <h2>East Africa</h2>
+            <p>
+                Major regional developments across East Africa.
+            </p>
+        </article>
+
+    </section>
+
+
+    <h2 class="section-title">Sudanese Football</h2>
+
+    <section class="news-grid">
+
+        <article class="card">
+            <span class="category">Football</span>
+            <h2>Sudanese Football</h2>
+            <p>
+                News about Sudanese football, clubs and competitions.
+            </p>
+        </article>
+
+        <article class="card">
+            <span class="category">Football</span>
+            <h2>Al Hilal</h2>
+            <p>
+                Latest news and updates about Al Hilal.
+            </p>
+        </article>
+
+        <article class="card">
+            <span class="category">Football</span>
+            <h2>Al Merrikh</h2>
+            <p>
+                Latest news and updates about Al Merrikh.
+            </p>
         </article>
 
     </section>
@@ -169,7 +277,7 @@
 </main>
 
 <footer>
-    News Aggregator — First version
+    Sudan News Hub — News from Sudan and East Africa
 </footer>
 
 </body>
