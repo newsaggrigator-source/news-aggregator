@@ -44,3 +44,26 @@ async function loadNews() {
 }
 
 loadNews();
+async function loadEthiopiaNews() {
+    const card = document.querySelector(".card h2");
+
+    try {
+        const response = await fetch(
+            "https://api.rss2json.com/v1/api.json?rss_url=" +
+            encodeURIComponent(
+                "https://news.google.com/rss/search?q=Ethiopia&hl=en&gl=US&ceid=US:en"
+            )
+        );
+
+        const data = await response.json();
+
+        if (data.items && data.items.length > 0) {
+            card.textContent = data.items[0].title;
+        }
+
+    } catch (error) {
+        console.error("Ethiopia news error:", error);
+    }
+}
+
+loadEthiopiaNews();
