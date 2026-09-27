@@ -1,79 +1,74 @@
 async function loadNews() {
-    const container = document.getElementById("sudan-news");
-
     try {
-        const response = await fetch(
-            "https://api.rss2json.com/v1/api.json?rss_url=" +
-            encodeURIComponent(
-                "https://news.google.com/rss/search?q=Sudan&hl=ar&gl=SD&ceid=SD:ar"
-            )
-        );
-
+        const response = await fetch("news.json");
         const data = await response.json();
 
-        container.innerHTML = "";
+        // Sudan
+        const sudanContainer = document.getElementById("sudan-news");
 
-        data.items.slice(0, 6).forEach(article => {
+        if (sudanContainer && data.sudan) {
+            sudanContainer.innerHTML = "";
 
-            const card = document.createElement("article");
-            card.className = "card";
+            data.sudan.slice(0, 6).forEach(article => {
+                const card = document.createElement("article");
+                card.className = "card";
 
-            card.innerHTML = `
-                <span class="category">السودان</span>
-                <h2>${article.title}</h2>
-                <p>${article.pubDate}</p>
-                <a href="${article.link}" target="_blank">
-                    اقرأ الخبر
-                </a>
-            `;
+                card.innerHTML = `
+                    <span class="category">السودان</span>
+                    <h2>${article.title}</h2>
+                    <p>${article.date}</p>
+                    <a href="${article.link}" target="_blank">اقرأ الخبر</a>
+                `;
 
-            container.appendChild(card);
-        });
+                sudanContainer.appendChild(card);
+            });
+        }
+
+        // Ethiopia
+        const ethiopiaContainer = document.getElementById("ethiopia-news");
+
+        if (ethiopiaContainer && data.ethiopia) {
+            ethiopiaContainer.innerHTML = "";
+
+            data.ethiopia.slice(0, 6).forEach(article => {
+                const card = document.createElement("article");
+                card.className = "card";
+
+                card.innerHTML = `
+                    <span class="category">Ethiopia</span>
+                    <h2>${article.title}</h2>
+                    <p>${article.date}</p>
+                    <a href="${article.link}" target="_blank">Read more</a>
+                `;
+
+                ethiopiaContainer.appendChild(card);
+            });
+        }
+
+        // Somalia
+        const somaliaContainer = document.getElementById("somalia-news");
+
+        if (somaliaContainer && data.somalia) {
+            somaliaContainer.innerHTML = "";
+
+            data.somalia.slice(0, 6).forEach(article => {
+                const card = document.createElement("article");
+                card.className = "card";
+
+                card.innerHTML = `
+                    <span class="category">Somalia</span>
+                    <h2>${article.title}</h2>
+                    <p>${article.date}</p>
+                    <a href="${article.link}" target="_blank">Read more</a>
+                `;
+
+                somaliaContainer.appendChild(card);
+            });
+        }
 
     } catch (error) {
-
-        container.innerHTML = `
-            <article class="card">
-                <h2>تعذر تحميل الأخبار</h2>
-                <p>سنحاول الاتصال بمصادر الأخبار مرة أخرى.</p>
-            </article>
-        `;
-
-        console.error(error);
+        console.error("News loading error:", error);
     }
 }
 
 loadNews();
-async function loadEthiopiaNews() {
-    const card = document.querySelector("#ethiopia-news-title");
-
-    try {
-        const rssUrl =
-            "https://feeds.bbci.co.uk/news/topics/cwlw3xz047jt/rss.xml";
-
-        const response = await fetch(
-            "https://api.allorigins.win/raw?url=" +
-            encodeURIComponent(rssUrl)
-        );
-
-        const xmlText = await response.text();
-
-        const parser = new DOMParser();
-        const xml = parser.parseFromString(xmlText, "text/xml");
-
-        const firstItem = xml.querySelector("item");
-
-        if (firstItem) {
-            const title = firstItem.querySelector("title");
-
-            if (title) {
-                card.textContent = title.textContent;
-            }
-        }
-
-    } catch (error) {
-        console.error("Ethiopia news error:", error);
-    }
-}
-
-loadEthiopiaNews();
