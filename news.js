@@ -65,6 +65,26 @@ async function loadNews() {
                 somaliaContainer.appendChild(card);
             });
         }
+        // Sudanese Football
+        const footballContainer = document.getElementById("football-news");
+
+        if (footballContainer && data.football) {
+            footballContainer.innerHTML = "";
+
+            data.football.slice(0, 6).forEach(article => {
+                const card = document.createElement("article");
+                card.className = "card";
+
+                card.innerHTML = `
+                    <span class="category">Football</span>
+                    <h2>${article.title}</h2>
+                    <p>${article.date}</p>
+                    <a href="${article.link}" target="_blank">Read more</a>
+                `;
+
+                footballContainer.appendChild(card);
+            });
+        }
 
     } catch (error) {
         console.error("News loading error:", error);
