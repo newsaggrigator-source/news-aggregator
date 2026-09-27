@@ -45,7 +45,7 @@ async function loadNews() {
 
 loadNews();
 async function loadEthiopiaNews() {
-    const card = document.querySelector("#ethiopia-news h2");
+    const card = document.querySelector("#ethiopia-news-title");
 
     try {
         const rssUrl =
