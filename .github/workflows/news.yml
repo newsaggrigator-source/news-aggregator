@@ -23,10 +23,11 @@ jobs:
           import xml.etree.ElementTree as ET
           import json
 
-          feeds = {
+           feeds = {
               "sudan": "https://news.google.com/rss/search?q=Sudan&hl=ar&gl=SD&ceid=SD:ar",
               "ethiopia": "https://feeds.bbci.co.uk/news/topics/cwlw3xz047jt/rss.xml",
-              "somalia": "https://news.google.com/rss/search?q=Somalia&hl=en&gl=US&ceid=US:en"
+              "somalia": "https://news.google.com/rss/search?q=Somalia&hl=en&gl=US&ceid=US:en",
+              "football": "https://news.google.com/rss/search?q=Sudanese+football&hl=en&gl=US&ceid=US:en"
           }
 
           result = {}
