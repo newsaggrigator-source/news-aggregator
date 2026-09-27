@@ -48,17 +48,27 @@ async function loadEthiopiaNews() {
     const card = document.querySelector("#ethiopia-news h2");
 
     try {
+        const rssUrl =
+            "https://feeds.bbci.co.uk/news/topics/cwlw3xz047jt/rss.xml";
+
         const response = await fetch(
-            "https://api.rss2json.com/v1/api.json?rss_url=" +
-            encodeURIComponent(
-                "https://feeds.bbci.co.uk/news/topics/cwlw3xz047jt/rss.xml"
-            )
+            "https://api.allorigins.win/raw?url=" +
+            encodeURIComponent(rssUrl)
         );
 
-        const data = await response.json();
+        const xmlText = await response.text();
 
-        if (data.items && data.items.length > 0) {
-            card.textContent = data.items[0].title;
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(xmlText, "text/xml");
+
+        const firstItem = xml.querySelector("item");
+
+        if (firstItem) {
+            const title = firstItem.querySelector("title");
+
+            if (title) {
+                card.textContent = title.textContent;
+            }
         }
 
     } catch (error) {
