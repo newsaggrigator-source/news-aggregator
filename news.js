@@ -1,23 +1,46 @@
-const newsSources = {
-    sudan: {
-        language: "ar",
-        title: "أخبار السودان",
-        feed: "https://alikhbariya.net/feeds/countries/sd.xml"
-    },
+async function loadNews() {
+    const container = document.getElementById("sudan-news");
 
-    ethiopia: {
-        language: "en",
-        title: "Ethiopia News",
-        feed: "https://feeds.bbci.co.uk/news/topics/c302m85qe3yt/rss.xml"
-    },
+    try {
+        const response = await fetch(
+            "https://api.rss2json.com/v1/api.json?rss_url=" +
+            encodeURIComponent(
+                "https://news.google.com/rss/search?q=Sudan&hl=ar&gl=SD&ceid=SD:ar"
+            )
+        );
 
-    somalia: {
-        language: "en",
-        title: "Somalia News",
-        feed: "https://feeds.bbci.co.uk/news/topics/cnx753jejqwt/rss.xml"
+        const data = await response.json();
+
+        container.innerHTML = "";
+
+        data.items.slice(0, 6).forEach(article => {
+
+            const card = document.createElement("article");
+            card.className = "card";
+
+            card.innerHTML = `
+                <span class="category">السودان</span>
+                <h2>${article.title}</h2>
+                <p>${article.pubDate}</p>
+                <a href="${article.link}" target="_blank">
+                    اقرأ الخبر
+                </a>
+            `;
+
+            container.appendChild(card);
+        });
+
+    } catch (error) {
+
+        container.innerHTML = `
+            <article class="card">
+                <h2>تعذر تحميل الأخبار</h2>
+                <p>سنحاول الاتصال بمصادر الأخبار مرة أخرى.</p>
+            </article>
+        `;
+
+        console.error(error);
     }
-};
+}
 
-console.log("Sudan News:", newsSources.sudan);
-console.log("Ethiopia News:", newsSources.ethiopia);
-console.log("Somalia News:", newsSources.somalia);
+loadNews();
