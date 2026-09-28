@@ -22,35 +22,89 @@ jobs:
           import urllib.request
           import xml.etree.ElementTree as ET
           import json
+          from html.parser import HTMLParser
 
           feeds = {
               "sudan": "https://news.google.com/rss/search?q=Sudan&hl=ar&gl=SD&ceid=SD:ar",
               "ethiopia": "https://feeds.bbci.co.uk/news/topics/cwlw3xz047jt/rss.xml",
               "somalia": "https://news.google.com/rss/search?q=Somalia&hl=en&gl=US&ceid=US:en",
-              "football": "https://maasader.com/rss/category/sport"
-                }
+              "football": "https://koorasudan.net/?post_type=articles"
+          }
 
           result = {}
+
+          class FootballParser(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.in_heading = False
+                  self.in_link = False
+                  self.current_title = ""
+                  self.current_link = ""
+                  self.articles = []
+
+              def handle_starttag(self, tag, attrs):
+                  attrs = dict(attrs)
+
+                  if tag in ("h2", "h3"):
+                      self.in_heading = True
+
+                  if tag == "a" and self.in_heading:
+                      self.in_link = True
+                      self.current_link = attrs.get("href", "")
+                      self.current_title = ""
+
+              def handle_data(self, data):
+                  if self.in_heading and self.in_link:
+                      self.current_title += data.strip()
+
+              def handle_endtag(self, tag):
+                  if tag == "a" and self.in_link:
+                      if self.current_title and self.current_link:
+                          self.articles.append({
+                              "title": self.current_title,
+                              "link": self.current_link,
+                              "date": ""
+                          })
+                      self.in_link = False
+
+                  if tag in ("h2", "h3"):
+                      self.in_heading = False
 
           for country, url in feeds.items():
               try:
                   data = urllib.request.urlopen(url, timeout=20).read()
-                  root = ET.fromstring(data)
 
-                  articles = []
+                  if country == "football":
+                      parser = FootballParser()
+                      parser.feed(data.decode("utf-8", errors="ignore"))
 
-                  for item in root.findall(".//item")[:10]:
-                      title = item.findtext("title", "")
-                      link = item.findtext("link", "")
-                      date = item.findtext("pubDate", "")
+                      unique = []
+                      seen = set()
 
-                      articles.append({
-                          "title": title,
-                          "link": link,
-                          "date": date
-                      })
+                      for article in parser.articles:
+                          if article["link"] not in seen:
+                              seen.add(article["link"])
+                              unique.append(article)
 
-                  result[country] = articles
+                      result[country] = unique[:10]
+
+                  else:
+                      root = ET.fromstring(data)
+
+                      articles = []
+
+                      for item in root.findall(".//item")[:10]:
+                          title = item.findtext("title", "")
+                          link = item.findtext("link", "")
+                          date = item.findtext("pubDate", "")
+
+                          articles.append({
+                              "title": title,
+                              "link": link,
+                              "date": date
+                          })
+
+                      result[country] = articles
 
               except Exception as e:
                   result[country] = []
