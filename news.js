@@ -16,8 +16,8 @@ async function loadNews() {
                 card.innerHTML = `
                     <span class="category">السودان</span>
                     <h2>${article.title}</h2>
-                    <p>${article.date}</p>
-                    <a href="${article.link}" target="_blank">اقرأ الخبر</a>
+                    <p class="date">${article.date}</p>
+                    <a class="read-more" href="${article.link}" target="_blank" rel="noopener noreferrer">اقرأ الخبر</a>
                 `;
 
                 sudanContainer.appendChild(card);
@@ -37,8 +37,8 @@ async function loadNews() {
                 card.innerHTML = `
                     <span class="category">Ethiopia</span>
                     <h2>${article.title}</h2>
-                    <p>${article.date}</p>
-                    <a href="${article.link}" target="_blank">Read more</a>
+                    <p class="date">${article.date}</p>
+                    <a class="read-more" href="${article.link}" target="_blank" rel="noopener noreferrer">Read more</a>
                 `;
 
                 ethiopiaContainer.appendChild(card);
@@ -58,13 +58,14 @@ async function loadNews() {
                 card.innerHTML = `
                     <span class="category">Somalia</span>
                     <h2>${article.title}</h2>
-                    <p>${article.date}</p>
-                    <a href="${article.link}" target="_blank">Read more</a>
+                    <p class="date">${article.date}</p>
+                    <a class="read-more" href="${article.link}" target="_blank" rel="noopener noreferrer">Read more</a>
                 `;
 
                 somaliaContainer.appendChild(card);
             });
         }
+
         // Sudanese Football
         const footballContainer = document.getElementById("football-news");
 
@@ -78,8 +79,8 @@ async function loadNews() {
                 card.innerHTML = `
                     <span class="category">Football</span>
                     <h2>${article.title}</h2>
-                    <p>${article.date}</p>
-                    <a href="${article.link}" target="_blank">Read more</a>
+                    <p class="date">${article.date}</p>
+                    <a class="read-more" href="${article.link}" target="_blank" rel="noopener noreferrer">Read more</a>
                 `;
 
                 footballContainer.appendChild(card);
