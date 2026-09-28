@@ -37,7 +37,7 @@ jobs:
                   data = urllib.request.urlopen(url, timeout=20).read()
                   root = ET.fromstring(data)
 
-                  articles = []
+                   articles = []
 
                   for item in root.findall(".//item")[:10]:
                       title = item.findtext("title", "")
