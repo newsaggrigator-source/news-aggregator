@@ -34,8 +34,8 @@ jobs:
 
           for country, url in feeds.items():
               try:
-                  data = urllib.request.urlopen(url, timeout=20).read()
-                  root = ET.fromstring(data)
+                                     data = urllib.request.urlopen(url, timeout=20).read()
+                                     root = ET.fromstring(data)
 
                                      articles = []
                   for item in root.findall(".//item")[:10]:
