@@ -27,8 +27,8 @@ jobs:
               "sudan": "https://news.google.com/rss/search?q=Sudan&hl=ar&gl=SD&ceid=SD:ar",
               "ethiopia": "https://feeds.bbci.co.uk/news/topics/cwlw3xz047jt/rss.xml",
               "somalia": "https://news.google.com/rss/search?q=Somalia&hl=en&gl=US&ceid=US:en",
-              "football": "https://news.google.com/rss/search?q=كرة+القدم+السودانية&hl=ar&gl=SD&ceid=SD:ar"
-          }
+              "football": "https://news.google.com/rss/search?q=الهلال+المريخ+السودان&hl=ar&gl=SD&ceid=SD:ar"
+                }
 
           result = {}
 
