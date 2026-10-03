@@ -20,6 +20,7 @@ jobs:
         run: |
           python - <<'PY'
           import urllib.request
+          import urllib.parse
           import xml.etree.ElementTree as ET
           import json
           from html.parser import HTMLParser
