@@ -153,6 +153,9 @@ jobs:
 
           for category, articles in data.items():
               for article in articles:
+                  if category == "football":
+                      article["content"] = ""
+                      continue
                   try:
                       url = article.get("link", "")
 
