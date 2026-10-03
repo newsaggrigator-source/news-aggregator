@@ -75,7 +75,7 @@ jobs:
               try:
                   data = urllib.request.urlopen(url, timeout=20).read()
 
-                  if country == "football":
+                  if country == "football-html":
                       parser = FootballParser()
                       parser.feed(data.decode("utf-8", errors="ignore"))
 
