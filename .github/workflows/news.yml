@@ -88,15 +88,15 @@ jobs:
 
                       result[country] = unique[:10]
 
-                  else:
+                                    else:
                       root = ET.fromstring(data)
 
-for elem in root.iter():
-    elem.tag = elem.tag.split("}", 1)[-1]
+                      for elem in root.iter():
+                          elem.tag = elem.tag.split("}", 1)[-1]
 
-articles = []
+                      articles = []
 
-for item in root.findall(".//item")[:10]:
+                      for item in root.findall(".//item")[:10]:
                           title = item.findtext("title", "")
                           link = item.findtext("link", "")
                           date = item.findtext("pubDate", "")
