@@ -88,10 +88,11 @@ jobs:
 
                       result[country] = unique[:10]
 
-                 else:
+                  else:
                       root = ET.fromstring(data)
 
-                      
+                      for elem in root.iter():
+                          elem.tag = elem.tag.split("}", 1)[-1]
 
                       articles = []
 
@@ -117,6 +118,7 @@ jobs:
 
           print("News file created successfully")
           PY
+
       - name: Prepare article text
         run: |
           python - <<'PY'
@@ -152,6 +154,7 @@ jobs:
               for article in articles:
                   try:
                       url = article.get("link", "")
+
                       if not url:
                           continue
 
@@ -175,13 +178,23 @@ jobs:
 
                   except Exception as e:
                       article["content"] = ""
-                      print("Article error:", article.get("link"), e)
+                      print(
+                          "Article error:",
+                          article.get("link"),
+                          e
+                      )
 
           with open("news.json", "w", encoding="utf-8") as f:
-              json.dump(data, f, ensure_ascii=False, indent=2)
+              json.dump(
+                  data,
+                  f,
+                  ensure_ascii=False,
+                  indent=2
+              )
 
           print("Article text prepared")
           PY
+
       - name: Save news
         run: |
           git config user.name "News Bot"
