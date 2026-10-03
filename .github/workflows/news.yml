@@ -91,9 +91,12 @@ jobs:
                   else:
                       root = ET.fromstring(data)
 
-                      articles = []
+for elem in root.iter():
+    elem.tag = elem.tag.split("}", 1)[-1]
 
-                      for item in root.findall(".//item")[:10]:
+articles = []
+
+for item in root.findall(".//item")[:10]:
                           title = item.findtext("title", "")
                           link = item.findtext("link", "")
                           date = item.findtext("pubDate", "")
