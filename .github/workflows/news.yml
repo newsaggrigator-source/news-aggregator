@@ -28,7 +28,7 @@ jobs:
               "sudan": "https://news.google.com/rss/search?q=Sudan&hl=ar&gl=SD&ceid=SD:ar",
               "ethiopia": "https://feeds.bbci.co.uk/news/topics/cwlw3xz047jt/rss.xml",
               "somalia": "https://news.google.com/rss/search?q=Somalia&hl=en&gl=US&ceid=US:en",
-              "football": "https://sudanplatform.net/tag/رئيس-الهلال/feed"
+              "football": "https://sudanplatform.net/tag/نادي-المريخ-السوداني/feed"
           }
 
           result = {}
