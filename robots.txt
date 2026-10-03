@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://newsaggrigator-source.github.io/news-aggregator/sitemap.xml
