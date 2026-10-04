@@ -154,7 +154,7 @@ async function loadNews() {
                 card.className = "card";
 
                 card.innerHTML = `
-                    <span class="category">Football</span>
+                    <span class="category">رياضة</span>
                     <h2>${article.title}</h2>
                     <p class="date">${article.date || ""}</p>
                     <a class="read-more"
