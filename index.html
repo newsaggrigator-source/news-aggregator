@@ -45,6 +45,22 @@ header {
     height: auto;
     display: block;
 }
+        header {
+    position: relative;
+}
+
+.header-link {
+    position: absolute;
+    display: block;
+    z-index: 10;
+}
+
+.home-link {
+    top: 82%;
+    right: 8%;
+    width: 12%;
+    height: 14%;
+}
 
         nav {
     display: block;
@@ -270,6 +286,9 @@ header {
     height: auto;
     display: block;
 }
+        footer {
+    padding: 10px 0;
+}
     </style>
 </head>
 
@@ -277,6 +296,7 @@ header {
 
 <header>
     <img src="header.png" alt="عين نيوز" class="header-image">
+    <a href="index.html#top-news" class="header-link home-link" aria-label="الرئيسية"></a>
 </header>
 <img src="banner.png" alt="Banner" class="banner">
 <nav>
