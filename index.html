@@ -1,408 +1,238 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="عين نيوز | أخبار السودان والقرن الأفريقي والرياضة السودانية من مصادر متعددة، مع ملخصات واضحة وروابط مباشرة إلى المصادر الأصلية.">
-    <meta name="google-site-verification" content="aGhhRUTOK8Ja5kaj3gyCl7T7F1ze2n-39837vhOAj6s" />
-    <meta property="og:title" content="عين نيوز | أخبار السودان والقرن الأفريقي والرياضة السودانية">
-    <meta property="og:description" content="أخبار السودان والقرن الأفريقي والرياضة السودانية من مصادر متعددة، مع ملخصات واضحة وروابط مباشرة إلى المصادر الأصلية.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://newsaggrigator-source.github.io/news-aggregator/">
-    
-    <title>عين نيوز | أخبار السودان والقرن الأفريقي والرياضة السودانية</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>عين نيوز</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+  body {
+    font-family: 'Tahoma', 'Arial', sans-serif;
+    background: #fff;
+  }
 
-        body {
-    font-family: Arial, sans-serif;
-    background: #f4f7f5;
-    color: #222;
-    margin: 0;
-}
-
-        header {
-    background: linear-gradient(135deg, #063b2d, #0b5f45);
-    color: white;
-    padding: 70px 25%;
-    text-align: center;
-    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.18);
-}
-
-header {
-    background: #ffffff;
-    padding: 0;
-    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.18);
-}
-
-.header-image {
+  /* ====== الهيدر ====== */
+  .header {
+    position: relative;
     width: 100%;
-    height: auto;
-    display: block;
-}
-        
-        nav {
-    display: block;
-}
-        .nav-content {
-    max-width: 1100px;
-    margin: auto;
+    height: 130px;
+    background: #fff;
     display: flex;
-    direction: rtl;
-    justify-content: center;
-    gap: 12px;
-    padding: 14px 20px;
-    flex-wrap: wrap;
-}
-
-        nav a {
-    text-decoration: none;
-    color: #063b2d;
-    font-weight: 700;
-    padding: 10px 16px;
-    border-radius: 10px;
-    transition: all 0.2s ease;
-}
-
-        nav a:hover {
-    background: #15966a;
-    color: white;
-    transform: translateY(-1px);
-}
-
-        main {
-    max-width: 1100px;
-    margin: 35px auto;
-    padding: 0 20px;
-}
-        .top-news {
-    background: linear-gradient(135deg, #f7fffb, #ffffff);
-    padding: 28px;
-    border-radius: 18px;
-    border: 1px solid #dce9e3;
-    box-shadow: 0 7px 20px rgba(0, 0, 0, 0.08);
-    margin-bottom: 35px;
-}
-
-        .top-news .section-title {
-            margin-top: 0;
-        }
-
-        
-        .welcome {
-    background: linear-gradient(135deg, #ffffff, #f3f9f6);
-    padding: 38px;
-    border-radius: 18px;
-    margin-bottom: 30px;
-    border: 1px solid #dce9e3;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-}
-
-        .welcome h1 {
-    font-size: 30px;
-    margin-bottom: 12px;
-    color: #063b2d;
-}
-
-        .welcome p {
-    color: #555;
-    line-height: 1.7;
-    font-size: 16px;
-}
-
-        .section-title {
-    font-size: 28px;
-    margin: 45px 0 20px;
-    padding-left: 14px;
-    border-left: 5px solid #15966a;
-    color: #063b2d;
-    font-weight: 700;
-}
-
-        .news-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 26px;
-    margin-bottom: 45px;
-}
-
-        .card {
-    background: #ffffff;
-    border-radius: 18px;
-    padding: 25px;
-    margin-bottom: 20px;
-    border: 1px solid #dce9e3;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.09);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
     overflow: hidden;
-}
+    border-bottom: 3px solid #0e7a3a;
+  }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
-        }
+  /* شريط أخضر أعلى اليمين */
+  .header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 280px;
+    height: 90px;
+    background: linear-gradient(135deg, #0e7a3a 0%, #14a04e 55%, transparent 55%);
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+    z-index: 0;
+  }
 
-        .card h2 {
-    font-size: 21px;
-    line-height: 1.55;
-    margin: 0 0 13px;
-    color: #063b2d;
-    font-weight: 700;
-}
+  /* شريط أخضر أسفل اليسار */
+  .header::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 280px;
+    height: 90px;
+    background: linear-gradient(315deg, #0e7a3a 0%, #14a04e 55%, transparent 55%);
+    clip-path: polygon(0 0, 0 100%, 100% 100%);
+    z-index: 0;
+  }
 
-        .card p {
-    color: #555;
-    line-height: 1.7;
-    margin-top: 9px;
-    font-size: 15px;
-}
-
-        .card .date {
-    font-size: 13px;
-    color: #777;
-    margin-top: 8px;
-    margin-bottom: 11px;
-}
-
-        .card .read-more {
-    display: inline-block;
-    margin-top: 12px;
-    padding: 10px 17px;
-    background: #15966a;
-    color: white;
-    text-decoration: none;
-    border-radius: 9px;
-    font-weight: 700;
-    font-size: 14px;
-    transition: background 0.2s ease, transform 0.2s ease;
-}
-
-        .card .read-more:hover {
-    background: #063b2d;
-    transform: translateY(-2px);
-}
-
-        .category {
-            display: inline-block;
-            margin-bottom: 12px;
-            padding: 5px 10px;
-            font-size: 12px;
-            font-weight: bold;
-            color: #176b4f;
-            background: #e8f5ef;
-            border-radius: 20px;
-            text-transform: uppercase;
-        }
-
-        footer {
-    margin-top: 50px;
-    padding: 15px 20px 10px;
-    background: linear-gradient(135deg, #063b2d, #0b5f45);
-    color: #e8fff6;
-    text-align: center;
-}
-
-.footer-content {
-    max-width: 1100px;
-    margin: auto;
-}
-
-.footer-logo img {
-    width: 140px;
-    height: auto;
-    margin-bottom: 20px;
-}
- .footer-image {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-.footer-nav {
+  /* ====== الأقسام الثلاثة ====== */
+  .right-section,
+  .center-section,
+  .left-section {
+    position: relative;
+    z-index: 2;
     display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin-bottom: 22px;
-    padding-bottom: 22px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    direction: rtl;
-}
+    align-items: center;
+  }
 
-.footer-nav a {
-    color: #e8fff6;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 15px;
-    transition: color 0.2s ease;
-}
+  .right-section { order: 3; gap: 15px; }
+  .center-section { order: 2; flex: 1; justify-content: center; }
+  .left-section  { order: 1; gap: 15px; }
 
-.footer-nav a:hover {
-    color: #7fffc4;
-}
+  /* ====== شريط البحث ====== */
+  .search-box {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 2px solid #0e7a3a;
+    border-radius: 25px;
+    padding: 7px 14px;
+    width: 220px;
+    transition: 0.3s;
+  }
 
-.footer-copy {
-    color: #b8d9cb;
-    font-size: 14px;
-    margin: 0;
-}
+  .search-box:hover { box-shadow: 0 0 8px rgba(14, 122, 58, 0.35); }
 
-        @media (max-width: 700px) {
-            .news-grid {
-                grid-template-columns: 1fr;
-            }
+  .search-box svg {
+    width: 16px;
+    height: 16px;
+    fill: #0e7a3a;
+    margin-left: 8px;
+    flex-shrink: 0;
+  }
 
-            .logo {
-                font-size: 26px;
-            }
-
-            .welcome h1 {
-                font-size: 24px;
-            }
-        }
-        .banner {
+  .search-box input {
+    border: none;
+    outline: none;
+    font-size: 13px;
     width: 100%;
-    height: auto;
-    display: block;
-}
-        footer {
-    padding: 0;
-}
-    </style>
-</head>
+    font-family: inherit;
+    color: #333;
+    background: transparent;
+  }
 
+  .search-box input::placeholder { color: #999; }
+
+  /* ====== اللوقو ====== */
+  .logo-img {
+    height: 90px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  /* ====== القائمة (HTML حقيقية) ====== */
+  .nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    list-style: none;
+  }
+
+  .nav-menu a {
+    text-decoration: none;
+    color: #1a1a1a;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: 'Tahoma', sans-serif;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: 0.25s;
+    position: relative;
+  }
+
+  .nav-menu a:hover {
+    color: #0e7a3a;
+    background: rgba(14, 122, 58, 0.08);
+  }
+
+  /* العنصر النشط (الرئيسية) */
+  .nav-menu a.active {
+    background: #0e7a3a;
+    color: #fff;
+    padding: 8px 18px;
+    border-radius: 8px;
+    box-shadow: 0 3px 8px rgba(14, 122, 58, 0.3);
+  }
+
+  .nav-menu a.active:hover {
+    background: #0a5c2b;
+    color: #fff;
+  }
+
+  /* خط أسفل العنصر النشط */
+  .nav-menu a.active::after {
+    content: "";
+    position: absolute;
+    bottom: -8px;
+    right: 0;
+    width: 100%;
+    height: 2px;
+    background: #0e7a3a;
+    border-radius: 2px;
+  }
+
+  /* ====== موبايل ====== */
+  @media (max-width: 900px) {
+    .header {
+      height: auto;
+      flex-direction: column;
+      padding: 12px 15px;
+      gap: 10px;
+    }
+
+    .header::before,
+    .header::after {
+      width: 150px;
+      height: 55px;
+    }
+
+    .right-section { order: 3; }
+    .center-section { order: 1; }
+    .left-section { order: 2; }
+
+    .logo-img { height: 65px; }
+
+    .nav-menu {
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .nav-menu a {
+      font-size: 13px;
+      padding: 5px 8px;
+    }
+
+    .nav-menu a.active {
+      padding: 6px 14px;
+    }
+
+    .search-box {
+      width: 100%;
+      max-width: 280px;
+    }
+  }
+</style>
+</head>
 <body>
 
-<header>
-    <img src="header.png" alt="عين نيوز" class="header-image">
-</header>
-<img src="banner.png" alt="Banner" class="banner">
-<nav>
-    <div class="nav-content">
-        <a href="index.html#top-news">الرئيسية</a>
-        <a href="#sudan-news">السودان</a>
-        <a href="#ethiopia-news">إثيوبيا</a>
-        <a href="#somalia-news">الصومال</a>
-        <a href="#football-news">رياضة</a>
-        <a href="about.html">من نحن</a>
+  <header class="header">
+
+    <!-- القائمة (يمين في RTL) -->
+    <div class="right-section">
+      <ul class="nav-menu">
+        <li><a href="#" class="active">الرئيسية</a></li>
+        <li><a href="#أخبار">أخبار</a></li>
+        <li><a href="#المنطقة">المنطقة</a></li>
+        <li><a href="#رياضة">رياضة</a></li>
+        <li><a href="#منوعات">منوعات</a></li>
+        <li><a href="#من-نحن">من نحن</a></li>
+      </ul>
     </div>
-</nav>
 
-<main>
-
-    <section class="welcome">
-        <h1>Latest News</h1>
-
-        <p>
-            Welcome to Ayn News.
-            Our goal is to bring important news from Sudan,
-            Ethiopia and Somalia together in one simple website.
-        </p>
-    </section>
-    <section class="top-news">
-    <h2 class="section-title">Top News</h2>
-
-    <div class="news-grid" id="top-news" style="scroll-margin-top: 100px;">
+    <!-- اللوقو (المنتصف) -->
+    <div class="center-section">
+      <img src="header-new.png" alt="عين نيوز" class="logo-img">
     </div>
-    </section>
 
-    <!-- Sudan -->
-
-    <h2 class="section-title">Sudan</h2>
-
-    <section class="news-grid" id="sudan-news" style="scroll-margin-top: 100px;">
-
-        <article class="card">
-            <span class="category">السودان</span>
-
-            <h2>جاري تحميل أخبار السودان...</h2>
-
-            <p>
-                سيتم عرض أحدث الأخبار هنا تلقائياً.
-            </p>
-        </article>
-
-    </section>
-
-
-    <!-- Ethiopia -->
-
-    <h2 class="section-title">Ethiopia</h2>
-
-    <section class="news-grid" id="ethiopia-news" style="scroll-margin-top: 100px;">
-
-        <article class="card">
-            <span class="category">Ethiopia</span>
-
-            <h2>Loading Ethiopia News...</h2>
-
-            <p>
-                Latest Ethiopia news will appear here.
-            </p>
-        </article>
-
-    </section>
-
-
-    <!-- Somalia -->
-
-    <h2 class="section-title">Somalia</h2>
-
-    <section class="news-grid" id="somalia-news" style="scroll-margin-top: 100px;">
-
-        <article class="card">
-            <span class="category">Somalia</span>
-
-            <h2>Loading Somalia News...</h2>
-
-            <p>
-                Latest Somalia news will appear here.
-            </p>
-        </article>
-
-    </section>
-
-
-    <!-- Sudanese Football -->
-
-    <h2 class="section-title">رياضة</h2>
-
-    <section class="news-grid" id="football-news" style="scroll-margin-top: 100px;">
-
-        <article class="card">
-            <span class="category">Football</span>
-
-            <h2>Loading Sudanese Football News...</h2>
-
-            <p>
-                Latest Sudanese football news will appear here.
-            </p>
-        </article>
-
-    </section>
-
-</main>
-
-
-<footer>
-    <img src="footer.png" alt="Footer" class="footer-image">
-
-    <div class="footer-nav">
-        <a href="index.html#top-news">الرئيسية</a>
-        <a href="index.html#sudan-news">السودان</a>
-        <a href="index.html#ethiopia-news">إثيوبيا</a>
-        <a href="index.html#somalia-news">الصومال</a>
-        <a href="index.html#football-news">رياضة</a>
-        <a href="about.html">من نحن</a>
+    <!-- البحث (يسار في RTL) -->
+    <div class="left-section">
+      <form class="search-box" onsubmit="event.preventDefault();">
+        <svg viewBox="0 0 24 24">
+          <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+        </svg>
+        <input type="text" placeholder="ابحث في الأخبار...">
+      </form>
     </div>
-</footer>
 
-
-<script src="news.js"></script>
+  </header>
 
 </body>
 </html>
