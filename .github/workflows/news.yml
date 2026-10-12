@@ -118,34 +118,32 @@ jobs:
                       print(country, "FEED ITEMS:", url, len(items))
 
                       for item in items:
-
-                      
                           title = item.findtext("title", "").strip()
                           link = item.findtext("link", "").strip()
                           date = item.findtext("pubDate", "")
                           published = parse_date(date)
+
                           if country == "football":
-                              print("FOOTBALL DATE CHECK:", title, "| raw date:", repr(date), "| parsed:", published)
+                             print("FOOTBALL DATE CHECK:", title, "| raw date:", repr(date), "| parsed:", published)
 
-                           if not title or not link or published is None:
+                          if not title or not link or published is None:
                               continue
 
-                          age_hours = (now - published).total_seconds() / 3600
+                           age_hours = (now - published).total_seconds() / 3600
+                           max_age_hours = 168 if country == "football" else 72
 
-                          max_age_hours = 168 if country == "football" else 72
-
-                          if age_hours < 0 or age_hours > max_age_hours:
-                              continue
+                           if age_hours < 0 or age_hours > max_age_hours:
+                                continue
 
                           if link in seen:
-                              continue
+                                continue
                           seen.add(link)
 
                           article = {
-                              "title": title,
-                              "link": link,
-                              "date": date
-                          }
+                                  "title": title,
+                                  "link": link,
+                                  "date": date
+            }
 
                           if age_hours <= 48:
                               recent_articles.append((published, article))
