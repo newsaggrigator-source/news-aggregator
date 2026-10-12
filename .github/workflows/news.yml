@@ -16,6 +16,7 @@ jobs:
       - name: Get repository
         uses: actions/checkout@v4
 
+      
       - name: Download news
         run: |
           python - <<'PY'
@@ -24,6 +25,21 @@ jobs:
           import xml.etree.ElementTree as ET
           import json
           from html.parser import HTMLParser
+          from datetime import datetime, timezone
+          from email.utils import parsedate_to_datetime
+
+          now = datetime.now(timezone.utc)
+
+          def parse_date(date_text):
+              if not date_text:
+                  return None
+              try:
+                  published = parsedate_to_datetime(date_text)
+                  if published.tzinfo is None:
+                      published = published.replace(tzinfo=timezone.utc)
+                  return published.astimezone(timezone.utc)
+              except (TypeError, ValueError, OverflowError):
+                  return None
 
           feeds = {
               "sudan": "https://news.google.com/rss/search?q=Sudan&hl=ar&gl=SD&ceid=SD:ar",
@@ -95,19 +111,45 @@ jobs:
                       for elem in root.iter():
                           elem.tag = elem.tag.split("}", 1)[-1]
 
-                      articles = []
+                      recent_articles = []
+                      fallback_articles = []
 
-                      for item in root.findall(".//item")[:10]:
+                      for item in root.findall(".//item"):
                           title = item.findtext("title", "")
                           link = item.findtext("link", "")
                           date = item.findtext("pubDate", "")
 
-                          articles.append({
+                          published = parse_date(date)
+
+                          if published is None:
+                              continue
+
+                          age_hours = (now - published).total_seconds() / 3600
+
+                          if age_hours < 0 or age_hours > 72:
+                              continue
+
+                          article = {
                               "title": title,
                               "link": link,
                               "date": date
-                          })
+                          }
 
+                          if age_hours <= 48:
+                              recent_articles.append((published, article))
+                          else:
+                              fallback_articles.append((published, article))
+
+                      recent_articles.sort(key=lambda x: x[0], reverse=True)
+                      fallback_articles.sort(key=lambda x: x[0], reverse=True)
+
+                      selected = recent_articles[:10]
+
+                      if len(selected) < 10:
+                          remaining = 10 - len(selected)
+                          selected.extend(fallback_articles[:remaining])
+
+                      articles = [article for published, article in selected]
                       result[country] = articles
 
               except Exception as e:
