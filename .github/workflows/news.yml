@@ -104,7 +104,10 @@ jobs:
 
               for url in urls:
                   try:
-                      data = urllib.request.urlopen(url, timeout=20).read()
+                  
+                      safe_url = urllib.parse.quote(url, safe=":/?=&%")
+                      data = urllib.request.urlopen(safe_url, timeout=20).read()
+
                       root = ET.fromstring(data)
 
                       for elem in root.iter():
