@@ -123,6 +123,7 @@ jobs:
                           link = item.findtext("link", "").strip()
                           date = item.findtext("pubDate", "")
                           published = parse_date(date)
+                          print("FOOTBALL DATE CHECK:", title, "| raw date:", repr(date), "| parsed:", published)
 
                           if not title or not link or published is None:
                               continue
