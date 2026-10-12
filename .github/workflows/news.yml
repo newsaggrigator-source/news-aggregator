@@ -50,8 +50,9 @@ jobs:
                   "https://sudanplatform.net/tag/نادي-المريخ-السوداني/feed",
                   "https://aljamhoria.net/tag/الهلال-السوداني/feed/",
                   "https://alzool.news/tag/الهلال-السوداني/feed",
-                  "https://akher-khabar.com/archives/tag/الهلال-السوداني/feed"
-             ]
+                  "https://akher-khabar.com/archives/tag/الهلال-السوداني/feed",
+                  "https://news.google.com/rss/search?q=%D8%A7%D9%84%D9%87%D9%84%D8%A7%D9%84+%D8%A7%D9%84%D8%B3%D9%88%D8%AF%D8%A7%D9%86%D9%8A+OR+%D8%A7%D9%84%D9%85%D8%B1%D9%8A%D8%AE+%D8%A7%D9%84%D8%B3%D9%88%D8%AF%D8%A7%D9%86%D9%8A+when%3A3d&hl=ar&gl=SD&ceid=SD%3Aar"
+            ]
           }
 
           result = {}
