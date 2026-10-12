@@ -109,11 +109,13 @@ jobs:
                       data = urllib.request.urlopen(safe_url, timeout=20).read()
 
                       root = ET.fromstring(data)
-
+                      
+                      items = root.findall(".//item")
+                       print(country, "FEED ITEMS:", url, len(items))
                       for elem in root.iter():
                           elem.tag = elem.tag.split("}", 1)[-1]
 
-                      for item in root.findall(".//item"):
+                      for item in items::
                           title = item.findtext("title", "").strip()
                           link = item.findtext("link", "").strip()
                           date = item.findtext("pubDate", "")
