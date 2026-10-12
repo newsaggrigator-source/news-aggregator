@@ -127,8 +127,33 @@ jobs:
                           if country == "football":
                               print("FOOTBALL DATE CHECK:", title, "| raw date:", repr(date), "| parsed:", published)
 
+                          
                           if not title or not link or published is None:
                               continue
+
+                          if country == "football":
+                              sport_keywords = [
+                                  "الهلال السوداني",
+                                  "المريخ السوداني",
+                                  "المنتخب السوداني",
+                                  "منتخب السودان",
+                                  "كرة القدم",
+                                  "دوري أبطال أفريقيا",
+                                  "الدوري السوداني",
+                                  "مباراة",
+                                  "لاعب الهلال",
+                                  "لاعب المريخ",
+                                  "مدرب الهلال",
+                                  "مدرب المريخ",
+                                  "السنغال",
+                                  "سيداما",
+                                  "رايون سبورت",
+                                  "أيجل نوار",
+                                  "أبطال أفريقيا"
+                              ]
+
+                              if not any(word in title for word in sport_keywords):
+                                  continue
 
                           age_hours = (now - published).total_seconds() / 3600
                           max_age_hours = 168 if country == "football" else 72
