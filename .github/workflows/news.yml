@@ -45,7 +45,13 @@ jobs:
               "sudan": "https://news.google.com/rss/search?q=Sudan&hl=ar&gl=SD&ceid=SD:ar",
               "ethiopia": "https://feeds.bbci.co.uk/news/topics/cwlw3xz047jt/rss.xml",
               "somalia": "https://news.google.com/rss/search?q=Somalia&hl=en&gl=US&ceid=US:en",
-              "football": "https://news.google.com/rss/search?q=%D9%83%D8%B1%D8%A9+%D8%A7%D9%84%D9%82%D8%AF%D9%85+%D8%A7%D9%84%D8%B3%D9%88%D8%AF%D8%A7%D9%86%D9%8A%D8%A9&hl=ar&gl=SD&ceid=SD:ar"
+              "football": [
+                  "https://sudanplatform.net/tag/رئيس-الهلال/feed",
+                  "https://sudanplatform.net/tag/نادي-المريخ-السوداني/feed",
+                  "https://aljamhoria.net/tag/الهلال-السوداني/feed/",
+                  "https://alzool.news/tag/الهلال-السوداني/feed",
+                  "https://akher-khabar.com/archives/tag/الهلال-السوداني/feed"
+             ]
           }
 
           result = {}
@@ -87,47 +93,40 @@ jobs:
                   if tag in ("h2", "h3"):
                       self.in_heading = False
 
-          for country, url in feeds.items():
-              try:
-                  data = urllib.request.urlopen(url, timeout=20).read()
+                      
+          for country, urls in feeds.items():
+              if isinstance(urls, str):
+                  urls = [urls]
 
-                  if country == "football-html":
-                      parser = FootballParser()
-                      parser.feed(data.decode("utf-8", errors="ignore"))
+              recent_articles = []
+              fallback_articles = []
+              seen = set()
 
-                      unique = []
-                      seen = set()
-
-                      for article in parser.articles:
-                          if article["link"] not in seen:
-                              seen.add(article["link"])
-                              unique.append(article)
-
-                      result[country] = unique[:10]
-
-                  else:
+              for url in urls:
+                  try:
+                      data = urllib.request.urlopen(url, timeout=20).read()
                       root = ET.fromstring(data)
 
                       for elem in root.iter():
                           elem.tag = elem.tag.split("}", 1)[-1]
 
-                      recent_articles = []
-                      fallback_articles = []
-
                       for item in root.findall(".//item"):
-                          title = item.findtext("title", "")
-                          link = item.findtext("link", "")
+                          title = item.findtext("title", "").strip()
+                          link = item.findtext("link", "").strip()
                           date = item.findtext("pubDate", "")
-
                           published = parse_date(date)
 
-                          if published is None:
+                          if not title or not link or published is None:
                               continue
 
                           age_hours = (now - published).total_seconds() / 3600
 
                           if age_hours < 0 or age_hours > 72:
                               continue
+
+                          if link in seen:
+                              continue
+                          seen.add(link)
 
                           article = {
                               "title": title,
@@ -140,21 +139,21 @@ jobs:
                           else:
                               fallback_articles.append((published, article))
 
-                      recent_articles.sort(key=lambda x: x[0], reverse=True)
-                      fallback_articles.sort(key=lambda x: x[0], reverse=True)
+                  except Exception as e:
+                      print(country, "FEED ERROR:", url, e)
 
-                      selected = recent_articles[:10]
+              recent_articles.sort(key=lambda x: x[0], reverse=True)
+              fallback_articles.sort(key=lambda x: x[0], reverse=True)
 
-                      if len(selected) < 10:
-                          remaining = 10 - len(selected)
-                          selected.extend(fallback_articles[:remaining])
+              selected = recent_articles[:10]
 
-                      articles = [article for published, article in selected]
-                      result[country] = articles
+              if len(selected) < 10:
+                  remaining = 10 - len(selected)
+                  selected.extend(fallback_articles[:remaining])
 
-              except Exception as e:
-                  result[country] = []
-                  print(country, "ERROR:", e)
+              result[country] = [
+                  article for published, article in selected
+              ]
 
           with open("news.json", "w", encoding="utf-8") as f:
               json.dump(result, f, ensure_ascii=False, indent=2)
