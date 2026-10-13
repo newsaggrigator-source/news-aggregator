@@ -156,7 +156,7 @@ jobs:
                                   continue
 
                           age_hours = (now - published).total_seconds() / 3600
-                          max_age_hours = 168 if country == "football" else 72
+                          max_age_hours = 336 if country == "ethiopia" else (168 if country == "football" else 72)
 
                           if age_hours < 0 or age_hours > max_age_hours:
                               continue
