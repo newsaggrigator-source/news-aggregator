@@ -49,6 +49,7 @@ async function loadNews() {
                     <span class="category">${article.category}</span>
                     <h2>${article.title}</h2>
                     <p class="date">${article.date || ""}</p>
+                    <p class="summary">${article.summary || ""}</p>
                     <a class="read-more"
                        href="${article.link}"
                        target="_blank"
@@ -75,7 +76,8 @@ async function loadNews() {
                 card.innerHTML = `
                     <span class="category">السودان</span>
                     <h2>${article.title}</h2>
-                    <p class="date">${article.date}</p>
+                    <p class="date">${article.date || ""}</p>
+                    <p class="summary">${article.summary || ""}</p>
                     <a class="read-more"
                        href="${article.link}"
                        target="_blank"
@@ -102,7 +104,8 @@ async function loadNews() {
                 card.innerHTML = `
                     <span class="category">Ethiopia</span>
                     <h2>${article.title}</h2>
-                    <p class="date">${article.date}</p>
+                    <p class="date">${article.date || ""}</p>
+                    <p class="summary">${article.summary || ""}</p>
                     <a class="read-more"
                        href="${article.link}"
                        target="_blank"
@@ -129,7 +132,8 @@ async function loadNews() {
                 card.innerHTML = `
                     <span class="category">Somalia</span>
                     <h2>${article.title}</h2>
-                    <p class="date">${article.date}</p>
+                    <p class="date">${article.date || ""}</p>
+                    <p class="summary">${article.summary || ""}</p>
                     <a class="read-more"
                        href="${article.link}"
                        target="_blank"
@@ -157,6 +161,7 @@ async function loadNews() {
                     <span class="category">رياضة</span>
                     <h2>${article.title}</h2>
                     <p class="date">${article.date || ""}</p>
+                    <p class="summary">${article.summary || ""}</p>
                     <a class="read-more"
                        href="${article.link}"
                        target="_blank"
