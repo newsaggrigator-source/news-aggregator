@@ -282,10 +282,143 @@ jobs:
           print("Article text prepared")
           PY
 
+      
+      - name: Summarize new articles
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import urllib.request
+          import urllib.parse
+          import re
+          from datetime import datetime, timezone
+
+          with open("news.json", encoding="utf-8") as f:
+              data = json.load(f)
+
+          try:
+              with open("summaries.json", encoding="utf-8") as f:
+                  summaries = json.load(f)
+          except (FileNotFoundError, json.JSONDecodeError):
+              summaries = {}
+
+          def normalize_url(url):
+              parts = urllib.parse.urlsplit(url or "")
+              query = urllib.parse.parse_qsl(parts.query)
+              query = [
+                  (k, v) for k, v in query
+                  if not k.lower().startswith("utm_")
+                  and k.lower() not in ("fbclid", "gclid")
+              ]
+              return urllib.parse.urlunsplit((
+                  parts.scheme.lower(),
+                  parts.netloc.lower(),
+                  parts.path.rstrip("/"),
+                  urllib.parse.urlencode(query),
+                  ""
+              ))
+
+          api_key = os.environ.get("OPENAI_API_KEY")
+          new_count = 0
+
+          for category, articles in data.items():
+              for article in articles:
+                  url = normalize_url(article.get("link", ""))
+
+                  if not url:
+                      continue
+
+                  old = summaries.get(url)
+
+                  if isinstance(old, dict) and old.get("summary"):
+                      article["summary"] = old["summary"]
+                      continue
+
+                  if isinstance(old, str) and old.strip():
+                      article["summary"] = old
+                      continue
+
+                  content = article.get("content", "").strip()
+                  if not content or not api_key:
+                      continue
+
+                  prompt = (
+                      "Summarize this news article in approximately "
+                      "100-150 words. Be factual, clear and concise. "
+                      "Do not invent facts. Write in the same language "
+                      "as the article title. Return only the summary.\n\n"
+                      "Title: " + article.get("title", "") +
+                      "\n\nArticle text:\n" + content[:12000]
+                  )
+
+                  payload = {
+                      "model": "gpt-4o-mini",
+                      "messages": [
+                          {
+                              "role": "user",
+                              "content": prompt
+                          }
+                      ],
+                      "max_tokens": 350,
+                      "temperature": 0.2
+                  }
+
+                  request = urllib.request.Request(
+                      "https://api.openai.com/v1/chat/completions",
+                      data=json.dumps(payload).encode("utf-8"),
+                      headers={
+                          "Authorization": "Bearer " + api_key,
+                          "Content-Type": "application/json"
+                      },
+                      method="POST"
+                  )
+
+                  try:
+                      with urllib.request.urlopen(
+                          request, timeout=60
+                      ) as response:
+                          result = json.loads(
+                              response.read().decode("utf-8")
+                          )
+
+                      summary = result["choices"][0]["message"][
+                          "content"
+                      ].strip()
+
+                      if summary:
+                          summaries[url] = {
+                              "summary": summary,
+                              "updated_at": datetime.now(
+                                  timezone.utc
+                              ).isoformat()
+                          }
+                          article["summary"] = summary
+                          new_count += 1
+                          print("Summary created:", article.get("title", "")[:80])
+
+                  except Exception as e:
+                      print(
+                          "Summary error:",
+                          article.get("title", "")[:80],
+                          str(e)[:300]
+                      )
+
+          with open("summaries.json", "w", encoding="utf-8") as f:
+              json.dump(summaries, f, ensure_ascii=False, indent=2)
+
+          with open("news.json", "w", encoding="utf-8") as f:
+              json.dump(data, f, ensure_ascii=False, indent=2)
+
+          print("New summaries created:", new_count)
+          print("Saved summaries:", len(summaries))
+          PY
+
       - name: Save news
         run: |
           git config user.name "News Bot"
           git config user.email "news-bot@users.noreply.github.com"
-          git add news.json
+          git add news.json summaries.json
           git commit -m "Update news" || echo "No changes"
           git push
