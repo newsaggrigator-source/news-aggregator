@@ -234,17 +234,16 @@ jobs:
                       if text:
                           self.text.append(text)
 
+          
           for category, articles in data.items():
               for article in articles:
-                  if category == "football":
+                  url = article.get("link", "")
+
+                  if not url:
                       article["content"] = ""
                       continue
+
                   try:
-                      url = article.get("link", "")
-
-                      if not url:
-                          continue
-
                       request = urllib.request.Request(
                           url,
                           headers={"User-Agent": "Mozilla/5.0"}
@@ -261,7 +260,10 @@ jobs:
                       text = " ".join(parser.text)
                       text = re.sub(r"\s+", " ", text).strip()
 
-                      article["content"] = text[:20000]
+                      if category == "football":
+                          article["content"] = text[:12000]
+                      else:
+                          article["content"] = text[:20000]
 
                   except Exception as e:
                       article["content"] = ""
