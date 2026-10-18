@@ -133,6 +133,8 @@ jobs:
                           
                           if not title or not link or published is None:
                               continue
+                          if country == "sudan" and not any("\u0600" <= ch <= "\u06FF" for ch in title):
+                              continue
 
                           if country == "football":
                               sport_keywords = [
