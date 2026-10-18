@@ -47,9 +47,16 @@ async function loadNews() {
 
                 card.innerHTML = `
                     <span class="category">${article.category}</span>
-                    <h2>${article.title}</h2>
+                    <h2 dir="${article.category === "السودان" ? "rtl" : "ltr"}"
+                         style="text-align: ${article.category === "السودان" ? "right" : "left"};">
+                         ${article.title}
+                    </h2>
                     <p class="date">${article.date || ""}</p>
-                    <p class="summary">${article.summary || ""}</p>
+                    <p class="summary"
+                        dir="${article.category === "السودان" ? "rtl" : "ltr"}"
+                        style="text-align: ${article.category === "السودان" ? "right" : "left"};">
+                        ${article.summary || ""}
+                     </p>
                     <a class="read-more"
                        href="${article.link}"
                        target="_blank"
