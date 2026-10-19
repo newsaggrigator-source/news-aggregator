@@ -129,6 +129,8 @@ jobs:
                           link = item.findtext("link", "").strip()
                           date = item.findtext("pubDate", "")
                           published = parse_date(date)
+                          if country == "ethiopia" and "allafrica.com" in url:
+                              print("ALLAFRICA DATE CHECK:", repr(date), "| parsed:", published)
 
                           if country == "football":
                               print("FOOTBALL DATE CHECK:", title, "| raw date:", repr(date), "| parsed:", published)
