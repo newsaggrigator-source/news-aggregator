@@ -472,10 +472,78 @@ jobs:
           print("Saved summaries:", len(summaries))
           PY
 
+      
+      - name: Generate article pages
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import re
+          import hashlib
+          import html
+
+          with open("news.json", "r", encoding="utf-8") as f:
+              news = json.load(f)
+
+          os.makedirs("news", exist_ok=True)
+
+          for article in news:
+              title = str(article.get("title", "خبر"))
+              link = str(article.get("link", ""))
+              summary = str(article.get("summary", ""))
+              date = str(article.get("date", ""))
+
+              if not link:
+                  continue
+
+              slug = re.sub(r"[^\w-]+", "-", title.lower(), flags=re.UNICODE).strip("-")
+              slug = slug[:60] or "story"
+              slug += "-" + hashlib.sha1(link.encode("utf-8")).hexdigest()[:10]
+
+              page_url = f"https://aynnews.net/news/{slug}.html"
+              article["page_url"] = page_url
+
+              safe_title = html.escape(title)
+              safe_summary = html.escape(summary)
+              safe_date = html.escape(date)
+              safe_link = html.escape(link, quote=True)
+
+              page = f"""<!DOCTYPE html>
+          <html lang="ar" dir="rtl">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>{safe_title} | عين نيوز</title>
+            <meta name="description" content="{safe_summary[:250]}">
+            <meta property="og:title" content="{safe_title}">
+            <meta property="og:description" content="{safe_summary[:250]}">
+            <meta property="og:type" content="article">
+            <meta property="og:url" content="{page_url}">
+          </head>
+          <body style="font-family:Arial,sans-serif;max-width:800px;margin:30px auto;padding:20px;line-height:1.9;color:#222">
+            <a href="https://aynnews.net/" style="color:#16834a">عين نيوز</a>
+            <hr>
+            <h1>{safe_title}</h1>
+            <p style="color:#666">{safe_date}</p>
+            <p>{safe_summary}</p>
+            <p><a href="{safe_link}" target="_blank" rel="noopener noreferrer">اقرأ الخبر من المصدر الأصلي</a></p>
+            <hr>
+            <a href="https://aynnews.net/">العودة إلى الصفحة الرئيسية</a>
+          </body>
+          </html>
+          """
+
+              with open(f"news/{slug}.html", "w", encoding="utf-8") as f:
+                  f.write(page)
+
+          with open("news.json", "w", encoding="utf-8") as f:
+              json.dump(news, f, ensure_ascii=False, indent=2)
+          PY
+
       - name: Save news
         run: |
           git config user.name "News Bot"
           git config user.email "news-bot@users.noreply.github.com"
-          git add news.json summaries.json
+          git add news.json summaries.json news/
           git commit -m "Update news" || echo "No changes"
           git push
