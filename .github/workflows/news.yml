@@ -173,10 +173,31 @@ jobs:
                               continue
                           seen.add(link)
 
+                          
+                          image_url = ""
+                          for media in item.iter():
+                              tag = media.tag.lower()
+                              if tag in ("thumbnail", "content", "enclosure"):
+                                  candidate = media.attrib.get("url", "")
+                                  media_type = media.attrib.get("type", "").lower()
+                                  is_image = (
+                                      media_type.startswith("image/")
+                                      or candidate.lower().split("?")[0].endswith(
+                                          (".jpg", ".jpeg", ".png", ".webp", ".gif")
+                                      )
+                                  )
+                                  if (
+                                      candidate.startswith(("http://", "https://"))
+                                      and (tag != "enclosure" or is_image)
+                                  ):
+                                      image_url = candidate
+                                      break
+
                           article = {
                               "title": title,
                               "link": link,
-                              "date": date
+                              "date": date,
+                              "image": image_url
                           }
 
                           if age_hours <= 48:
