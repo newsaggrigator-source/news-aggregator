@@ -227,6 +227,9 @@ jobs:
                   article for published, article in selected
               ]
               print(country, "SELECTED ARTICLES:", len(selected))
+              if country == "ethiopia":
+                  for published, article in selected:
+                      print("ETHIOPIA SELECTED SOURCE:", article["date"], article["link"])
 
           with open("news.json", "w", encoding="utf-8") as f:
               json.dump(result, f, ensure_ascii=False, indent=2)
