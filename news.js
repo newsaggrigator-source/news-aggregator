@@ -46,6 +46,7 @@ async function loadNews() {
                 card.className = "card";
 
                 card.innerHTML = `
+                    ${article.image ? `<img src="${article.image}" alt="" loading="lazy" style="width:100%; height:190px; object-fit:cover; border-radius:12px; margin-bottom:15px;">` : ""}
                     <span class="category">${article.category}</span>
                     <h2 dir="${article.category === "السودان" ? "rtl" : "ltr"}"
                          style="text-align: ${article.category === "السودان" ? "right" : "left"};">
