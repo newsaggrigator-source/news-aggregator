@@ -120,6 +120,8 @@ jobs:
                       items = root.findall(".//item")
                       print(country, "FEED ITEMS:", url, len(items))
                       print(country, "FEED SAMPLE:", url, [i.findtext("title", "") for i in items[:3]])
+                      if country == "ethiopia" and "allafrica.com" in url:
+                          print("ALLAFRICA DATE FIELDS:", [elem.tag for elem in items[0]] if items else [])
 
                       
                       for item in items:
