@@ -279,6 +279,27 @@ jobs:
                           request,
                           timeout=20
                       ).read().decode("utf-8", errors="ignore")
+                      
+                      
+                      
+                      
+                      image_url = ""
+                      if category in ("sudan", "ethiopia", "somalia"):
+                          for pattern in (
+                              r'<meta[^>]*property=["\']og:image["\'][^>]*content=["\']([^"\']+)["\']',
+                              r'<meta[^>]*content=["\']([^"\']+)["\'][^>]*property=["\']og:image["\']',
+                              r'<meta[^>]*name=["\']twitter:image["\'][^>]*content=["\']([^"\']+)["\']',
+                              r'<meta[^>]*content=["\']([^"\']+)["\'][^>]*name=["\']twitter:image["\']'
+                          ):
+                              image_match = re.search(
+                                  pattern, html, re.IGNORECASE
+                              )
+                              if image_match:
+                                  image_url = image_match.group(1).strip()
+                                  break
+
+                      article["image"] = image_url
+
 
                       parser = TextParser()
                       parser.feed(html)
