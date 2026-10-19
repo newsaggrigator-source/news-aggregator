@@ -59,7 +59,7 @@ async function loadNews() {
                         ${article.summary || ""}
                      </p>
                     <a class="read-more"
-                       href="${article.link}"
+                       href="${article.page_url || article.link}"
                        target="_blank"
                        rel="noopener noreferrer">
                        ${article.button}
