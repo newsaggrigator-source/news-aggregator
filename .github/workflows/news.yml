@@ -119,6 +119,7 @@ jobs:
 
                       items = root.findall(".//item")
                       print(country, "FEED ITEMS:", url, len(items))
+                      print(country, "FEED SAMPLE:", url, [i.findtext("title", "") for i in items[:3]])
 
                       
                       for item in items:
