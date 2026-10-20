@@ -306,8 +306,7 @@ jobs:
                                   image_url = image_match.group(1).strip()
                                   break
 
-                      article["image"] = image_url
-
+                      article["image"] = "" if any(word in image_url.lower() for word in ("logo", "favicon", "site-icon", "masthead", "brand")) else image_url
 
                       parser = TextParser()
                       parser.feed(html)
