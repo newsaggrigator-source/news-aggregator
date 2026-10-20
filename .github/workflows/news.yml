@@ -444,17 +444,16 @@ jobs:
                           "content"
                       ].strip()
 
-                      if summary and not 
-                      summary.startswith(("عذرًا", "عذراً")):
-                          summaries[url] = {
-                              "summary": summary,
-                              "updated_at": datetime.now(
-                                  timezone.utc
-                              ).isoformat()
-                          }
-                          article["summary"] = summary
-                          new_count += 1
-                          print("Summary created:", article.get("title", "")[:80])
+                            if summary and not summary.startswith(("عذرًا", "عذراً")):
+                                summaries[url] = {
+                                 "summary": summary,
+                                "updated_at": datetime.now(
+                                    timezone.utc
+                                ).isoformat()
+                            }
+                            article["summary"] = summary
+                            new_count += 1
+                            print("Summary created:", article.get("title", "")[:80])
 
                   except Exception as e:
                       print(
