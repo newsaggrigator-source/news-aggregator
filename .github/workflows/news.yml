@@ -520,8 +520,9 @@ jobs:
               safe_date = html.escape(date)
               safe_link = html.escape(link, quote=True)
               image_url = str(article.get("image", ""))
+              if "logo" in image_url.lower():
+                  image_url = ""
               safe_image = html.escape(image_url, quote=True)
-
               page = f"""<!DOCTYPE html>
           <html lang="ar" dir="rtl">
           <head>
