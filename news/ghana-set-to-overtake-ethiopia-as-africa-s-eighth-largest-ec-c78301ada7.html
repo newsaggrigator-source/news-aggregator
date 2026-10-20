@@ -9,9 +9,25 @@
   <meta property="og:description" content="Ghana is projected to surpass Ethiopia as Africa&#x27;s eighth-largest economy in 2026, with an estimated GDP of $128.64 billion compared to Ethiopia&#x27;s $127.15 billion, according to the IMF&#x27;s October 2026 World Economic Outlook. This shift ">
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://aynnews.net/news/ghana-set-to-overtake-ethiopia-as-africa-s-eighth-largest-ec-c78301ada7.html">
+  <script>
+  function shareNews() {
+    if (navigator.share) {
+       navigator.share({title: document.title, url: location.href});
+     } else if (navigator.clipboard) {
+       navigator.clipboard.writeText(location.href).then(function() {
+         alert('تم نسخ رابط الخبر');
+       });
+     } else {
+        prompt('انسخ رابط الخبر:', location.href);
+     }
+  }
+ </script>
 </head>
 <body style="font-family:Arial,sans-serif;max-width:800px;margin:30px auto;padding:20px;line-height:1.9;color:#222">
-  <a href="https://aynnews.net/" style="color:#16834a">عين نيوز</a>
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+    <a href="https://aynnews.net/" style="color:#16834a">عين نيوز</a>
+    <button onclick="shareNews()" style="background:#16834a;color:white;border:0;border-radius:8px;padding:9px 14px;cursor:pointer;font-size:15px">↗ مشاركة الخبر</button>
+  </div>
   <hr>
   <h1 dir="auto">Ghana Set to Overtake Ethiopia As Africa&#x27;s Eighth-Largest Economy After Kenya Takes East Africa Lead</h1>
   <img src="https://cdn.allafrica.com/download/pic/main/main/csiid/00601844:3d05f3c2c4e1fdbd2210629f644501df:arc614x376:w1200.jpg" alt="Ghana Set to Overtake Ethiopia As Africa&#x27;s Eighth-Largest Economy After Kenya Takes East Africa Lead" style="width:100%;height:auto;border-radius:10px;margin:15px 0;" onerror="this.style.display='none'">
