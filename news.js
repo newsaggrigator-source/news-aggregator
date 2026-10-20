@@ -87,7 +87,7 @@ async function loadNews() {
                     <p class="date">${article.date || ""}</p>
                     <p class="summary" dir="rtl" style="text-align: right;">${article.summary || ""}</p>
                     <a class="read-more"
-                       href="${article.link}"
+                       href="${article.page_url || article.link}"
                        target="_blank"
                        rel="noopener noreferrer">
                        اقرأ الخبر
@@ -115,7 +115,7 @@ async function loadNews() {
                     <p class="date">${article.date || ""}</p>
                     <p class="summary" dir="ltr" style="text-align: left;">${article.summary || ""}</p>
                     <a class="read-more"
-                       href="${article.link}"
+                       href="${article.page_url || article.link}"
                        target="_blank"
                        rel="noopener noreferrer">
                        Read more
@@ -143,7 +143,7 @@ async function loadNews() {
                     <p class="date">${article.date || ""}</p>
                     <p class="summary" dir="ltr" style="text-align: left;">${article.summary || ""}</p>
                     <a class="read-more"
-                       href="${article.link}"
+                       href="${article.page_url || article.link}"
                        target="_blank"
                        rel="noopener noreferrer">
                        Read more
@@ -172,7 +172,7 @@ async function loadNews() {
                     <p class="date">${article.date || ""}</p>
                     <p class="summary" dir="rtl" style="text-align: right;">${article.summary || ""}</p>
                     <a class="read-more"
-                       href="${article.link}"
+                       href="${article.page_url || article.link}"
                        target="_blank"
                        rel="noopener noreferrer">
                        Read more
