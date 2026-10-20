@@ -535,9 +535,9 @@ jobs:
           <body style="font-family:Arial,sans-serif;max-width:800px;margin:30px auto;padding:20px;line-height:1.9;color:#222">
             <a href="https://aynnews.net/" style="color:#16834a">عين نيوز</a>
             <hr>
-            <h1>{safe_title}</h1>
+            <h1 dir="auto">{safe_title}</h1>
             <p style="color:#666">{safe_date}</p>
-            <p>{safe_summary}</p>
+            <p dir="auto">{safe_summary}</p>
             <p><a href="{safe_link}" target="_blank" rel="noopener noreferrer">اقرأ الخبر من المصدر الأصلي</a></p>
             <hr>
             <a href="https://aynnews.net/">العودة إلى الصفحة الرئيسية</a>
