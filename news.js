@@ -108,7 +108,7 @@ async function loadNews() {
             data.ethiopia.slice(0, 6).forEach(article => {
                 const card = document.createElement("article");
                 card.className = "card";
-
+                card.style.direction = "ltr";
                 card.innerHTML = `
                     <span class="category">Ethiopia</span>
                     <h2 dir="ltr" style="text-align: left;">${article.title}</h2>
@@ -136,6 +136,7 @@ async function loadNews() {
             data.somalia.slice(0, 6).forEach(article => {
                 const card = document.createElement("article");
                 card.className = "card";
+                card.style.direction = "ltr";
 
                 card.innerHTML = `
                     <span class="category">Somalia</span>
