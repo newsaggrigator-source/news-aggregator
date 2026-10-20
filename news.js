@@ -111,7 +111,7 @@ async function loadNews() {
 
                 card.innerHTML = `
                     <span class="category">Ethiopia</span>
-                    <h2>${article.title}</h2>
+                    <h2 dir="ltr" style="text-align: left;">${article.title}</h2>
                     <p class="date">${article.date || ""}</p>
                     <p class="summary" dir="ltr" style="text-align: left;">${article.summary || ""}</p>
                     <a class="read-more"
@@ -139,7 +139,7 @@ async function loadNews() {
 
                 card.innerHTML = `
                     <span class="category">Somalia</span>
-                    <h2>${article.title}</h2>
+                    <h2 dir="ltr" style="text-align: left;">${article.title}</h2>
                     <p class="date">${article.date || ""}</p>
                     <p class="summary" dir="ltr" style="text-align: left;">${article.summary || ""}</p>
                     <a class="read-more"
