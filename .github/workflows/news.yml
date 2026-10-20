@@ -444,7 +444,8 @@ jobs:
                           "content"
                       ].strip()
 
-                      if summary:
+                      if summary and not 
+                      summary.startswith(("عذرًا", "عذراً")):
                           summaries[url] = {
                               "summary": summary,
                               "updated_at": datetime.now(
