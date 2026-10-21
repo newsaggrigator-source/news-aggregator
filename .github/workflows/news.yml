@@ -280,18 +280,18 @@ jobs:
 
                   try:
                       request = urllib.request.Request(
-                           url,
-                           headers={"User-Agent": "Mozilla/5.0"}
+                          url,
+                          headers={"User-Agent": "Mozilla/5.0"}
                       )
 
                       with urllib.request.urlopen(
                           request,
                           timeout=20
                       ) as response:
-                           html = response.read().decode(
+                          html = response.read().decode(
                               "utf-8", errors="ignore"
-                         )
-                         final_url = response.geturl()
+                          )
+                          final_url = response.geturl()
 
                       if "news.google.com" in url.lower():
                           url = final_url
