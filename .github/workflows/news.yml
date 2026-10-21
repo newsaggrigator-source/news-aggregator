@@ -486,9 +486,20 @@ jobs:
           with open("summaries.json", "w", encoding="utf-8") as f:
               json.dump(summaries, f, ensure_ascii=False, indent=2)
 
+          for category, articles in data.items():
+              data[category] = [
+                  article for article in articles
+                  if isinstance(article, dict)
+                  and str(article.get("summary", "")).strip()
+              ]
+              print(
+                  category,
+                  "ARTICLES WITH SUMMARIES:",
+                  len(data[category])
+              )
+
           with open("news.json", "w", encoding="utf-8") as f:
               json.dump(data, f, ensure_ascii=False, indent=2)
-
           print("New summaries created:", new_count)
           print("Saved summaries:", len(summaries))
           PY
