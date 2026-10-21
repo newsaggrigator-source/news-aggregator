@@ -56,7 +56,7 @@ async function loadNews() {
                     <p class="summary"
                         dir="${article.category === "السودان" ? "rtl" : "ltr"}"
                         style="text-align: ${article.category === "السودان" ? "right" : "left"};">
-                        ${article.summary || ""}
+                        ${(article.summary || "").split(/\s+/).slice(0, 60).join(" ")}
                      </p>
                     <a class="read-more"
                        href="${article.page_url || article.link}"
