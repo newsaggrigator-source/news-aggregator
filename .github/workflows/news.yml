@@ -278,6 +278,7 @@ jobs:
                   if "news.google.com" in url.lower():
                       try:
                           decoded = gnewsdecoder(url)
+                          print("GOOGLE NEWS DECODER RESULT:", decoded)
                           if decoded.get("status") and decoded.get("decoded_url"):
                               url = decoded["decoded_url"]
                               print("GOOGLE NEWS DECODED URL:", url)
