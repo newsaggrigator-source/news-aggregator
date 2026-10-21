@@ -279,8 +279,10 @@ jobs:
                       try:
                           decoded = gnewsdecoder(url)
                           print("GOOGLE NEWS DECODER RESULT:", decoded)
-                          if decoded.get("status") and decoded.get("decoded_url"):
-                              url = decoded["decoded_url"]
+                          if decoded.get("success") and decoded.get("decoded_url"):
+                              url = decoded["decoded_url"].strip()
+                              if url.startswith("[") and "](" in url:
+                                  url = url.split("](", 1)[1].rstrip(")")
                               print("GOOGLE NEWS DECODED URL:", url)
                       except Exception as e:
                           print("Google News decode failed:", e)
