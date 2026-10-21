@@ -82,6 +82,7 @@ async function loadNews() {
                 card.className = "card";
 
                 card.innerHTML = `
+                    ${article.image ? `<img src="${article.image}" alt="" loading="lazy" style="width:100%; height:190px; object-fit:cover; border-radius:12px; margin-bottom:15px;">` : ""}
                     <span class="category">السودان</span>
                     <h2>${article.title}</h2>
                     <p class="date">${article.date || ""}</p>
@@ -110,6 +111,7 @@ async function loadNews() {
                 card.className = "card";
                 card.style.direction = "ltr";
                 card.innerHTML = `
+                    ${article.image ? `<img src="${article.image}" alt="" loading="lazy" style="width:100%; height:190px; object-fit:cover; border-radius:12px; margin-bottom:15px;">` : ""}
                     <span class="category">Ethiopia</span>
                     <h2 dir="ltr" style="text-align: left;">${article.title}</h2>
                     <p class="date">${article.date || ""}</p>
@@ -139,6 +141,7 @@ async function loadNews() {
                 card.style.direction = "ltr";
 
                 card.innerHTML = `
+                    ${article.image ? `<img src="${article.image}" alt="" loading="lazy" style="width:100%; height:190px; object-fit:cover; border-radius:12px; margin-bottom:15px;">` : ""}
                     <span class="category">Somalia</span>
                     <h2 dir="ltr" style="text-align: left;">${article.title}</h2>
                     <p class="date">${article.date || ""}</p>
@@ -168,6 +171,7 @@ async function loadNews() {
                 card.className = "card";
 
                 card.innerHTML = `
+                    ${article.image ? `<img src="${article.image}" alt="" loading="lazy" style="width:100%; height:190px; object-fit:cover; border-radius:12px; margin-bottom:15px;">` : ""}
                     <span class="category">رياضة</span>
                     <h2>${article.title}</h2>
                     <p class="date">${article.date || ""}</p>
