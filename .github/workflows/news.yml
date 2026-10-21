@@ -313,7 +313,7 @@ jobs:
                       
                       
                       image_url = article.get("image", "")
-                      if category in ("sudan", "ethiopia", "somalia") and "news.google.com" not in url.lower():
+                      if category in ("sudan", "ethiopia", "somalia", "football") and "news.google.com" not in url.lower():
                           for pattern in (
                               r'<meta[^>]*property=["\']og:image["\'][^>]*content=["\']([^"\']+)["\']',
                               r'<meta[^>]*content=["\']([^"\']+)["\'][^>]*property=["\']og:image["\']',
