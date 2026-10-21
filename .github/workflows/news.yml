@@ -333,6 +333,7 @@ jobs:
                       parser.feed(html)
 
                       text = " ".join(parser.text)
+                      print("ARTICLE TEXT LENGTH:", len(text), article.get("title", "")[:60])
                       text = re.sub(r"\s+", " ", text).strip()
 
                       if category == "football":
