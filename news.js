@@ -171,7 +171,7 @@ async function loadNews() {
                 card.className = "card";
 
                 card.innerHTML = `
-                    ${article.image ? `<img src="${article.image}" alt="" referrerpolicy="no-referrer" onerror="this.style.display='none'" style="width:100%; height:190px; object-fit:cover; border-radius:12px; margin-bottom:15px;">` : ""}
+                    ${article.image ? `<img src="${article.image}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()" style="width:100%; height:190px; object-fit:cover; border-radius:12px; margin-bottom:15px;">` : ""}
                     <span class="category">رياضة</span>
                     <h2>${article.title}</h2>
                     <p class="date">${article.date || ""}</p>
