@@ -400,6 +400,10 @@ jobs:
 
           api_key = os.environ.get("OPENAI_API_KEY")
           new_count = 0
+          skipped_saved = 0
+          skipped_no_content = 0
+          skipped_no_api_key = 0
+
 
           for category, articles in data.items():
               for article in articles:
@@ -408,19 +412,32 @@ jobs:
                   if not url:
                       continue
 
+                  
                   old = summaries.get(url)
 
                   if isinstance(old, dict) and old.get("summary"):
                       article["summary"] = old["summary"]
+                      skipped_saved += 1
                       continue
 
                   if isinstance(old, str) and old.strip():
                       article["summary"] = old
+                      skipped_saved += 1
                       continue
 
+
+
+                  
                   content = article.get("content", "").strip()
-                  if not content or not api_key:
+
+                  if not content:
+                      skipped_no_content += 1
                       continue
+
+                  if not api_key:
+                      skipped_no_api_key += 1
+                      continue
+
 
                   prompt = (
                       "Summarize this news article in 150-160 words. "
@@ -545,6 +562,9 @@ jobs:
               json.dump(data, f, ensure_ascii=False, indent=2)
           print("New summaries created:", new_count)
           print("Saved summaries:", len(summaries))
+          print("Skipped - saved summaries:", skipped_saved)
+          print("Skipped - no article text:", skipped_no_content)
+          print("Skipped - no API key:", skipped_no_api_key)
           PY
 
       
