@@ -550,7 +550,7 @@ jobs:
               data[category] = [
                   article for article in articles
                   if isinstance(article, dict)
-                  and str(article.get("summary", "")).strip()
+                  and str(article.get("title", "")).strip()
               ]
               print(
                   category,
