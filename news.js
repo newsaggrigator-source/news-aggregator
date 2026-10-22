@@ -115,7 +115,7 @@ async function loadNews() {
                     <span class="category">Ethiopia</span>
                     <h2 dir="ltr" style="text-align: left;">${article.title}</h2>
                     <p class="date">${article.date || ""}</p>
-                    <p class="summary" dir="ltr" style="text-align: left;">${(article.summary || "").split(/\s+/).slice(0, 60).join(" ")}</p>
+                    <p class="summary" dir="ltr" style="text-align: justify;">${(article.summary || "").split(/\s+/).slice(0, 60).join(" ")}</p>
                     <a class="read-more"
                        href="${article.page_url || article.link}"
                        target="_blank"
