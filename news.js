@@ -175,7 +175,7 @@ async function loadNews() {
                     <span class="category">رياضة</span>
                     <h2>${article.title}</h2>
                     <p class="date">${article.date || ""}</p>
-                    <p class="summary" dir="rtl" style="text-align: right;">${(article.summary || "").split(/\s+/).slice(0, 60).join(" ")}</p>
+                    <p class="summary" dir="rtl" style="text-align: justify;">${(article.summary || "").split(/\s+/).slice(0, 60).join(" ")}</p>
                     <a class="read-more"
                        href="${article.page_url || article.link}"
                        target="_blank"
