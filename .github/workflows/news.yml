@@ -423,13 +423,16 @@ jobs:
                       continue
 
                   prompt = (
-                      "Summarize this news article in approximately "
-                      "100-150 words. Be factual, clear and concise. "
-                      "Do not invent facts. Write in the same language "
-                      "as the article title. Return only the summary.\n\n"
+                      "Summarize this news article in 150-160 words. "
+                      "The summary MUST contain at least 150 words and "
+                      "no more than 160 words. Count the words before "
+                      "responding and revise if necessary. "
+                      "Be factual, clear and concise. Do not invent facts. "
+                      "Write in the same language as the article title. "
+                      "Return only the summary.\n\n"
                       "Title: " + article.get("title", "") +
                       "\n\nArticle text:\n" + content[:12000]
-                  )
+                 )
 
                   payload = {
                       "model": "gpt-4o-mini",
@@ -443,29 +446,61 @@ jobs:
                       "temperature": 0.2
                   }
 
-                  request = urllib.request.Request(
-                      "https://api.openai.com/v1/chat/completions",
-                      data=json.dumps(payload).encode("utf-8"),
-                      headers={
-                          "Authorization": "Bearer " + api_key,
-                          "Content-Type": "application/json"
-                      },
-                      method="POST"
-                  )
-
                   try:
-                      with urllib.request.urlopen(
-                          request, timeout=60
-                      ) as response:
-                          result = json.loads(
-                              response.read().decode("utf-8")
+                      summary = ""
+
+                      for attempt in range(3):
+                          if attempt == 0:
+                              payload["messages"][0]["content"] = prompt
+                          else:
+                              payload["messages"][0]["content"] = (
+                                  prompt
+                                  + "\n\nYour previous response did not "
+                                  + "meet the 150-160 word requirement. "
+                                  + "Return a corrected summary of "
+                                  + "150-160 words only."
+                              )
+
+                          request = urllib.request.Request(
+                              "https://api.openai.com/v1/chat/completions",
+                              data=json.dumps(payload).encode("utf-8"),
+                              headers={
+                                  "Authorization": "Bearer " + api_key,
+                                  "Content-Type": "application/json"
+                              },
+                              method="POST"
                           )
 
-                      summary = result["choices"][0]["message"][
-                          "content"
-                      ].strip()
+                          with urllib.request.urlopen(
+                              request, timeout=60
+                          ) as response:
+                              result = json.loads(
+                                  response.read().decode("utf-8")
+                              )
 
-                      if summary and not summary.startswith(("عذرًا", "عذراً")):
+                          candidate = result["choices"][0]["message"][
+                              "content"
+                          ].strip()
+
+                          word_count = len(
+                              re.findall(r"\b\w+\b", candidate)
+                          )
+
+                          if (
+                              150 <= word_count <= 160
+                              and not candidate.startswith(("عذرًا", "عذراً"))
+                          ):
+                              summary = candidate
+                              break
+
+                          print(
+                              "Word count outside range:",
+                              word_count,
+                              "attempt:",
+                              attempt + 1
+                          )
+
+                      if summary:
                           summaries[url] = {
                               "summary": summary,
                               "updated_at": datetime.now(
@@ -474,7 +509,15 @@ jobs:
                           }
                           article["summary"] = summary
                           new_count += 1
-                          print("Summary created:", article.get("title", "")[:80])
+                          print(
+                              "Summary created:",
+                              article.get("title", "")[:80]
+                          )
+                      else:
+                          print(
+                              "Summary rejected after 3 attempts:",
+                              article.get("title", "")[:80]
+                          )
 
                   except Exception as e:
                       print(
