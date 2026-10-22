@@ -466,7 +466,7 @@ jobs:
                   try:
                       summary = ""
 
-                      for attempt in range(3):
+                      for attempt in range(2):
                           if attempt == 0:
                               payload["messages"][0]["content"] = prompt
                           else:
@@ -504,7 +504,7 @@ jobs:
                           )
 
                           if (
-                              150 <= word_count <= 160
+                              word_count >= 150
                               and not candidate.startswith(("عذرًا", "عذراً"))
                           ):
                               summary = candidate
