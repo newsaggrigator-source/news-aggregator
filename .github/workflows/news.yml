@@ -463,58 +463,46 @@ jobs:
                       "temperature": 0.2
                   }
 
+                  
+                  
                   try:
                       summary = ""
+                      payload["messages"][0]["content"] = prompt
 
-                      for attempt in range(2):
-                          if attempt == 0:
-                              payload["messages"][0]["content"] = prompt
-                          else:
-                              payload["messages"][0]["content"] = (
-                                  prompt
-                                  + "\n\nYour previous response did not "
-                                  + "meet the 150-160 word requirement. "
-                                  + "Return a corrected summary of "
-                                  + "150-160 words only."
-                              )
+                      request = urllib.request.Request(
+                          "https://api.openai.com/v1/chat/completions",
+                          data=json.dumps(payload).encode("utf-8"),
+                          headers={
+                              "Authorization": "Bearer " + api_key,
+                              "Content-Type": "application/json"
+                          },
+                          method="POST"
+                      )
 
-                          request = urllib.request.Request(
-                              "https://api.openai.com/v1/chat/completions",
-                              data=json.dumps(payload).encode("utf-8"),
-                              headers={
-                                  "Authorization": "Bearer " + api_key,
-                                  "Content-Type": "application/json"
-                              },
-                              method="POST"
+                      with urllib.request.urlopen(
+                          request, timeout=60
+                      ) as response:
+                          result = json.loads(
+                              response.read().decode("utf-8")
                           )
 
-                          with urllib.request.urlopen(
-                              request, timeout=60
-                          ) as response:
-                              result = json.loads(
-                                  response.read().decode("utf-8")
-                              )
+                      candidate = result["choices"][0]["message"][
+                          "content"
+                      ].strip()
 
-                          candidate = result["choices"][0]["message"][
-                              "content"
-                          ].strip()
+                      word_count = len(
+                          re.findall(r"\b\w+\b", candidate)
+                      )
 
-                          word_count = len(
-                              re.findall(r"\b\w+\b", candidate)
-                          )
-
-                          if (
-                              word_count >= 150
-                              and not candidate.startswith(("عذرًا", "عذراً"))
-                          ):
-                              summary = candidate
-                              break
-
+                      if (
+                          word_count >= 150
+                          and not candidate.startswith(("عذرًا", "عذراً"))
+                      ):
+                          summary = candidate
+                      else:
                           print(
                               "Word count outside range:",
-                              word_count,
-                              "attempt:",
-                              attempt + 1
+                              word_count
                           )
 
                       if summary:
@@ -532,7 +520,7 @@ jobs:
                           )
                       else:
                           print(
-                              "Summary rejected after 3 attempts:",
+                              "Summary rejected:",
                               article.get("title", "")[:80]
                           )
 
@@ -542,6 +530,7 @@ jobs:
                           article.get("title", "")[:80],
                           str(e)[:300]
                       )
+
 
           with open("summaries.json", "w", encoding="utf-8") as f:
               json.dump(summaries, f, ensure_ascii=False, indent=2)
