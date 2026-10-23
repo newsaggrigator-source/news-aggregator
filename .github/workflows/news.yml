@@ -281,8 +281,9 @@ jobs:
                           print("GOOGLE NEWS DECODER RESULT:", decoded)
                           if decoded.get("success") and decoded.get("decoded_url"):
                               url = decoded["decoded_url"].strip()
-                              if url.startswith("[") and "](" in url:
-                                  url = url.split("](", 1)[1].rstrip(")")
+                              match = re.search(r"\]\((https?://[^)]+)\)", url)
+                              if match:
+                                  url = match.group(1)
                               print("GOOGLE NEWS DECODED URL:", url)
                       except Exception as e:
                           print("Google News decode failed:", e)
