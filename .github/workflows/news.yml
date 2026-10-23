@@ -302,7 +302,8 @@ jobs:
                           timeout=20
                       ) as response:
                           html = response.read().decode(
-                              "utf-8", errors="ignore"
+                              response.headers.get_content_charset() or "utf-8",
+                              errors="replace"
                           )
                           final_url = response.geturl()
 
