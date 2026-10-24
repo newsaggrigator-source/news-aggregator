@@ -280,7 +280,7 @@ jobs:
                           decoded = gnewsdecoder(url)
                           print("GOOGLE NEWS DECODER RESULT:", decoded)
                           if decoded.get("success") and decoded.get("decoded_url"):
-                              url = decoded["decoded_url"].strip()
+                              url = re.findall(r"https?://[^)\]]+", decoded["decoded_url"])[0].strip()
                               print("DEBUG DECODED URL REPR:", repr(url))
                               import re
                               match = re.search(r"\[(https?://[^\]]+)\]\(", url)
