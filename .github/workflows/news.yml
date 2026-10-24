@@ -282,10 +282,10 @@ jobs:
                           if decoded.get("success") and decoded.get("decoded_url"):
                               raw_url = decoded["decoded_url"].strip()
                               url = raw_url[1:raw_url.index("](")] if raw_url.startswith("[") and "](" in raw_url else raw_url
-                              print("RAW DECODED URL:", repr(raw_url))
-                              print("FINAL URL:", repr(url))
-                              print("IS CLEAN URL:", url.startswith("https://") and "](" not in url and not url.startswith("["))
-
+                              print("RAW REPR:", repr(raw_url))
+                              print("RAW STARTS WITH [:", raw_url.startswith("["))
+                              print("FINAL REPR:", repr(url))
+                              print("FINAL STARTS WITH HTTPS:", url.startswith("https://"))
                       except Exception as e:
                           print("Google News decode failed:", e)
 
