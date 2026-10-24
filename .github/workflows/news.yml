@@ -288,6 +288,8 @@ jobs:
                                   url = match.group(1)
                               print("CLEANED URL REPR:", repr(url))
                               print("REGEX MATCH TEST:", bool(re.search(r"\[(https?://[^\]]+)\]\(", url)))
+                              print("URL FIRST CHAR CODES:", [ord(c) for c in url[:5]])
+                              print("URL MARKER POSITIONS:", url.find("]("), url.find("https://"))
                               print("GOOGLE NEWS DECODED URL:", url)
                       except Exception as e:
                           print("Google News decode failed:", e)
