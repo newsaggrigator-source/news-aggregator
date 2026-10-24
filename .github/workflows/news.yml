@@ -281,6 +281,7 @@ jobs:
                           print("GOOGLE NEWS DECODER RESULT:", decoded)
                           if decoded.get("success") and decoded.get("decoded_url"):
                               raw_url = decoded["decoded_url"].strip()
+                              print("URL CHARACTERS:", [(i, repr(c), ord(c)) for i, c in enumerate(raw_url[:5])])
                               url = raw_url[1:raw_url.index("](")] if raw_url.startswith("[") and "](" in raw_url else raw_url
                               print("URL DEBUG:", "RAW=", repr(raw_url), "| FINAL=", repr(url), "| FIRST_CODE=", ord(raw_url[0]) if raw_url else None, "| TITLE=", article.get("title", "")[:40])
                               print("URL CHECK:", repr(url), "| STARTS HTTPS:", url.startswith("https://"), "| HAS MARKDOWN:", "](" in url or url.startswith("["))
