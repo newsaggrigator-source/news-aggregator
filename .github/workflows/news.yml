@@ -16,7 +16,6 @@ jobs:
       - name: Get repository
         uses: actions/checkout@v4
 
-      
       - name: Download news
         run: |
           python - <<'PY'
@@ -97,7 +96,6 @@ jobs:
                   if tag in ("h2", "h3"):
                       self.in_heading = False
 
-                      
           for country, urls in feeds.items():
               if isinstance(urls, str):
                   urls = [urls]
@@ -108,7 +106,6 @@ jobs:
 
               for url in urls:
                   try:
-                  
                       safe_url = urllib.parse.quote(url, safe=":/?=&%")
                       data = urllib.request.urlopen(safe_url, timeout=20).read()
 
@@ -123,7 +120,6 @@ jobs:
                       if country == "ethiopia" and "allafrica.com" in url:
                           print("ALLAFRICA DATE FIELDS:", [elem.tag for elem in items[0]] if items else [])
 
-                      
                       for item in items:
                           title = item.findtext("title", "").strip()
                           link = item.findtext("link", "").strip()
@@ -135,7 +131,6 @@ jobs:
                           if country == "football":
                               print("FOOTBALL DATE CHECK:", title, "| raw date:", repr(date), "| parsed:", published)
 
-                          
                           if not title or not link or published is None:
                               continue
                           if country == "sudan":
@@ -178,7 +173,6 @@ jobs:
                               continue
                           seen.add(link)
 
-                          
                           image_url = ""
                           for media in item.iter():
                               tag = media.tag.lower().split("}")[-1]
@@ -209,7 +203,6 @@ jobs:
                               recent_articles.append((published, article))
                           else:
                               fallback_articles.append((published, article))
-
 
                   except Exception as e:
                       print(country, "FEED ERROR:", url, e)
@@ -247,7 +240,54 @@ jobs:
           from googlenewsdecoder import gnewsdecoder
           import re
           from html.parser import HTMLParser
+          from urllib.parse import urlparse
 
+          # ============================================================
+          # دوال تنظيف واستخراج الرابط
+          # ============================================================
+          def _validate_url(url):
+              """يتحقق أن الرابط صالح (scheme + netloc) ويُعيده نظيفًا أو None."""
+              if not url:
+                  return None
+              url = url.strip().strip("()[]<> \t\n\"'")
+              parsed = urlparse(url)
+              if parsed.scheme in ("http", "https") and parsed.netloc:
+                  return url
+              return None
+
+          def extract_clean_url(raw_url):
+              """
+              يستخرج رابط HTTP/HTTPS خام من نص قد يكون:
+              - رابطًا نظيفًا: https://...
+              - Markdown: [text](https://...)
+              - Markdown بعنوان: [text](https://... "title")
+              - نص مختلط يحتوي رابطًا في أي مكان
+              يُرجع None إذا لم يجد رابطًا صالحًا.
+              """
+              if not raw_url or not isinstance(raw_url, str):
+                  return None
+
+              text = raw_url.strip()
+
+              # 1. محاولة Markdown (كامل أو جزئي): [..](url) أو [..](url "title")
+              md_matches = re.findall(r'\]\(\s*(https?://[^\s\)"\']+)', text)
+              if md_matches:
+                  return _validate_url(md_matches[0])
+
+              # 2. إذا كان النص نفسه رابطًا نظيفًا
+              if text.startswith(("http://", "https://")):
+                  return _validate_url(text)
+
+              # 3. البحث عن أول http في أي مكان بالنص
+              m = re.search(r'https?://[^\s\)\]\"\'<>]+', text)
+              if m:
+                  return _validate_url(m.group(0).rstrip(".,;:"))
+
+              return None
+
+          # ============================================================
+          # تحميل البيانات
+          # ============================================================
           with open("news.json", "r", encoding="utf-8") as f:
               data = json.load(f)
 
@@ -271,37 +311,67 @@ jobs:
                       if text:
                           self.text.append(text)
 
-          
+          # ============================================================
+          # معالجة كل مقال
+          # ============================================================
           for category, articles in data.items():
               for article in articles:
                   url = article.get("link", "")
+                  original_google_url = url  # نحتفظ به كـ fallback
+
+                  # ---------- فك تشفير روابط Google News ----------
                   if "news.google.com" in url.lower():
                       try:
                           decoded = gnewsdecoder(url)
                           print("GOOGLE NEWS DECODER RESULT:", decoded)
                           if decoded.get("success") and decoded.get("decoded_url"):
-                              raw_url = decoded["decoded_url"].strip()
-                              print("URL CHARACTERS:", [(i, repr(c), ord(c)) for i, c in enumerate(raw_url[:5])])
-                              url = re.sub(r"^\[([^\]]+)\]\(https?://[^)]+\)$", r"\1", raw_url).strip()
-                              print("URL DEBUG:", "RAW=", repr(raw_url), "| FINAL=", repr(url), "| FIRST_CODE=", ord(raw_url[0]) if raw_url else None, "| TITLE=", article.get("title", "")[:40])
-                              print("URL CHECK:", repr(url), "| STARTS HTTPS:", url.startswith("https://"), "| HAS MARKDOWN:", "](" in url or url.startswith("["))
+                              raw_url = decoded["decoded_url"]
+                              print("URL DEBUG RAW:", repr(raw_url))
+
+                              clean = extract_clean_url(raw_url)
+                              print("URL DEBUG CLEAN:", repr(clean))
+
+                              if clean:
+                                  url = clean
+                                  # ✅ تحديث رابط المقال ليُحفظ رابط المصدر الأصلي
+                                  article["link"] = clean
+                                  print("FINAL SAVED LINK:", repr(article["link"]),
+                                        "| HAS MARKDOWN:",
+                                        "](" in article["link"] or article["link"].startswith("["))
+                              else:
+                                  print("URL CLEAN FAILED, keeping Google News URL. TITLE:",
+                                        article.get("title", "")[:60])
+                          else:
+                              print("Google News decode unsuccessful:", decoded)
                       except Exception as e:
                           print("Google News decode failed:", e)
 
+                  # ---------- التحقق النهائي قبل الطلب ----------
                   if not url:
                       article["content"] = ""
                       continue
 
+                  valid = _validate_url(url)
+                  if not valid:
+                      print("FINAL URL INVALID, trying Google News URL:", repr(url))
+                      url = original_google_url
+                      if not _validate_url(url):
+                          article["content"] = ""
+                          print("No valid URL at all for:",
+                                article.get("title", "")[:60])
+                          continue
+                      # لا نحدّث article["link"] لأنه رابط Google وليس المصدر
+                  else:
+                      url = valid
+
+                  # ---------- جلب نص الخبر ----------
                   try:
                       request = urllib.request.Request(
                           url,
                           headers={"User-Agent": "Mozilla/5.0"}
                       )
 
-                      with urllib.request.urlopen(
-                          request,
-                          timeout=20
-                      ) as response:
+                      with urllib.request.urlopen(request, timeout=20) as response:
                           html = response.read().decode(
                               response.headers.get_content_charset() or "utf-8",
                               errors="replace"
@@ -310,32 +380,36 @@ jobs:
 
                       if "news.google.com" in url.lower():
                           url = final_url
-                      
-                      
-                      
-                      
+
+                      # ---------- استخراج صورة الخبر ----------
                       image_url = article.get("image", "")
-                      if category in ("sudan", "ethiopia", "somalia", "football") and "news.google.com" not in url.lower():
+                      if category in ("sudan", "ethiopia", "somalia", "football") \
+                              and "news.google.com" not in url.lower():
                           for pattern in (
                               r'<meta[^>]*property=["\']og:image["\'][^>]*content=["\']([^"\']+)["\']',
                               r'<meta[^>]*content=["\']([^"\']+)["\'][^>]*property=["\']og:image["\']',
                               r'<meta[^>]*name=["\']twitter:image["\'][^>]*content=["\']([^"\']+)["\']',
                               r'<meta[^>]*content=["\']([^"\']+)["\'][^>]*name=["\']twitter:image["\']'
                           ):
-                              image_match = re.search(
-                                  pattern, html, re.IGNORECASE
-                              )
+                              image_match = re.search(pattern, html, re.IGNORECASE)
                               if image_match:
                                   image_url = image_match.group(1).strip()
                                   break
 
-                      article["image"] = "" if any(word in image_url.lower() for word in ("logo", "favicon", "site-icon", "masthead", "brand")) else image_url
+                      article["image"] = "" if any(
+                          word in image_url.lower()
+                          for word in ("logo", "favicon", "site-icon", "masthead", "brand")
+                      ) else image_url
 
+                      # ---------- استخراج النص ----------
                       parser = TextParser()
                       parser.feed(html)
 
                       text = " ".join(parser.text)
-                      print("ARTICLE TEXT LENGTH:", len(text), "| CATEGORY:", category, "| TITLE:", article.get("title", "")[:60], "| URL:", url)
+                      print("ARTICLE TEXT LENGTH:", len(text),
+                            "| CATEGORY:", category,
+                            "| TITLE:", article.get("title", "")[:60],
+                            "| URL:", url)
                       text = re.sub(r"\s+", " ", text).strip()
 
                       if category == "football":
@@ -345,24 +419,17 @@ jobs:
 
                   except Exception as e:
                       article["content"] = ""
-                      print(
-                          "Article error:",
-                          article.get("link"),
-                          e
-                      )
+                      print("Article error:", article.get("link"), e)
 
+          # ============================================================
+          # حفظ النتيجة
+          # ============================================================
           with open("news.json", "w", encoding="utf-8") as f:
-              json.dump(
-                  data,
-                  f,
-                  ensure_ascii=False,
-                  indent=2
-              )
+              json.dump(data, f, ensure_ascii=False, indent=2)
 
           print("Article text prepared")
           PY
 
-      
       - name: Summarize new articles
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -406,7 +473,6 @@ jobs:
           skipped_no_content = 0
           skipped_no_api_key = 0
 
-
           for category, articles in data.items():
               for article in articles:
                   url = normalize_url(article.get("link", ""))
@@ -414,7 +480,6 @@ jobs:
                   if not url:
                       continue
 
-                  
                   old = summaries.get(url)
 
                   if isinstance(old, dict) and old.get("summary"):
@@ -427,9 +492,6 @@ jobs:
                       skipped_saved += 1
                       continue
 
-
-
-                  
                   content = article.get("content", "").strip()
 
                   if not content:
@@ -439,7 +501,6 @@ jobs:
                   if not api_key:
                       skipped_no_api_key += 1
                       continue
-
 
                   prompt = (
                       "Summarize this news article in 150-160 words. "
@@ -465,8 +526,6 @@ jobs:
                       "temperature": 0.2
                   }
 
-                  
-                  
                   try:
                       summary = ""
                       payload["messages"][0]["content"] = prompt
@@ -533,7 +592,6 @@ jobs:
                           str(e)[:300]
                       )
 
-
           with open("summaries.json", "w", encoding="utf-8") as f:
               json.dump(summaries, f, ensure_ascii=False, indent=2)
 
@@ -558,7 +616,6 @@ jobs:
           print("Skipped - no API key:", skipped_no_api_key)
           PY
 
-      
       - name: Generate article pages
         run: |
           python - <<'PY'
