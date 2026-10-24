@@ -335,9 +335,11 @@ jobs:
                                   url = clean
                                   # ✅ تحديث رابط المقال ليُحفظ رابط المصدر الأصلي
                                   article["link"] = clean
-                                  print("FINAL SAVED LINK:", repr(article["link"]),
-                                        "| HAS MARKDOWN:",
-                                        "](" in article["link"] or article["link"].startswith("["))
+                                  print("LINK CHECK:", repr(article["link"]))
+                                  print("LINK TYPE:", type(article["link"]))
+                                  print("HAS BRACKET:", article["link"].startswith("["))
+                                  print("HAS CLOSE-PAREN:", "](" in article["link"])
+                                  print("LINK LENGTH:", len(article["link"]))
                               else:
                                   print("URL CLEAN FAILED, keeping Google News URL. TITLE:",
                                         article.get("title", "")[:60])
