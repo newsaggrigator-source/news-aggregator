@@ -280,17 +280,12 @@ jobs:
                           decoded = gnewsdecoder(url)
                           print("GOOGLE NEWS DECODER RESULT:", decoded)
                           if decoded.get("success") and decoded.get("decoded_url"):
-                              url = decoded["decoded_url"].strip().split("](", 1)[0].lstrip("[")
-                              print("DEBUG DECODED URL REPR:", repr(url))
-                              import re
-                              match = re.search(r"\[(https?://[^\]]+)\]\(", url)
-                              if match:
-                                  url = match.group(1)
-                              print("CLEANED URL REPR:", repr(url))
-                              print("REGEX MATCH TEST:", bool(re.search(r"\[(https?://[^\]]+)\]\(", url)))
-                              print("URL FIRST CHAR CODES:", [ord(c) for c in url[:5]])
-                              print("URL MARKER POSITIONS:", url.find("]("), url.find("https://"))
-                              print("GOOGLE NEWS DECODED URL:", url)
+                              raw_url = decoded["decoded_url"].strip()
+                              url = raw_url.split("](", 1)[0].lstrip("[")
+                              print("RAW DECODED URL:", repr(raw_url))
+                              print("FINAL URL:", repr(url))
+                              print("IS CLEAN URL:", url.startswith("https://") and "](" not in url and not url.startswith("["))
+
                       except Exception as e:
                           print("Google News decode failed:", e)
 
