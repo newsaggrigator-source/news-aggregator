@@ -284,6 +284,7 @@ jobs:
                               print("DEBUG DECODED URL REPR:", repr(url))
                               if url.startswith("[") and "](" in url:
                                   url = url[1:].split("](", 1)[0]
+                              print("CLEANED URL REPR:", repr(url))
                               print("GOOGLE NEWS DECODED URL:", url)
                       except Exception as e:
                           print("Google News decode failed:", e)
