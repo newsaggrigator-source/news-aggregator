@@ -279,6 +279,7 @@ jobs:
                   return None
 
               text = raw_url.strip()
+              print("RAW URL REPR:", repr(text))
 
               # 1. محاولة Markdown (كامل أو جزئي): [..](url) أو [..](url "title")
               md_matches = re.findall(r'\[(https?://[^\]]+)\]\(https?://[^)\s]+\)', text)
