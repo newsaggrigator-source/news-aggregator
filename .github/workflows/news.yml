@@ -285,10 +285,9 @@ jobs:
               md_matches = re.findall(r'\[(https?://[^\]]+)\]\(https?://[^)\s]+\)', text)
               print("MARKDOWN MATCHES:", repr(md_matches))
               if md_matches:
-                  print("EXTRACTED URL:", repr(re.search(r'https?://[^\s\]\)]+', md_matches[0]).group(0)))
-                  return _validate_url(
-                      re.search(r'https?://[^\s\]\)]+', md_matches[0]).group(0)
-                  )
+                  m = re.search(r'https?://[^)\s]+', text)
+                  if m:
+                       return _validate_url(m.group(0).rstrip("]"))
 
               # 2. إذا كان النص نفسه رابطًا نظيفًا
               if text.startswith(("http://", "https://")):
