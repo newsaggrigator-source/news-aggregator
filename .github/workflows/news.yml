@@ -347,6 +347,7 @@ jobs:
                               print("URL DEBUG RAW:", repr(raw_url))
 
                               clean = extract_clean_url(raw_url)
+                              print("DIRECT URL TEST:", repr(extract_clean_url("[https://example.com/article](https://example.com/article)")))
                               print("URL DEBUG CLEAN:", repr(clean))
 
                               if clean:
