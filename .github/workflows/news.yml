@@ -296,7 +296,7 @@ jobs:
 
               return None
           # اختبار مؤقت لتنظيف رابط Markdown
-          test_url = "[https://example.com/article](https://example.com/article)"
+          test_url = "[https://sudantribune.net/article/320421](https://sudantribune.net/article/320421)"
           test_result = extract_clean_url(test_url)
           print("CLEANER TEST OUTPUT:", repr(test_result))
           print("CLEANER TEST TYPE:", type(test_result).__name__)
