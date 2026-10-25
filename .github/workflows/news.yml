@@ -107,7 +107,14 @@ jobs:
               for url in urls:
                   try:
                       safe_url = urllib.parse.quote(url, safe=":/?=&%")
-                      data = urllib.request.urlopen(safe_url, timeout=20).read()
+                      for attempt in range(3):
+                          try:
+                             data = urllib.request.urlopen(safe_url, timeout=20).read()
+                             break
+                         except Exception:
+                             if attempt == 2:
+                                 raise
+                             time.sleep(2)
 
                       root = ET.fromstring(data)
 
