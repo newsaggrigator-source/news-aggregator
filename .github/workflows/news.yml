@@ -618,6 +618,7 @@ jobs:
                   article for article in articles
                   if isinstance(article, dict)
                   and str(article.get("title", "")).strip()
+                  and str(article.get("summary", "")).strip()
               ]
               print(
                   category,
