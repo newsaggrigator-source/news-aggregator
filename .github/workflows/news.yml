@@ -511,7 +511,7 @@ jobs:
 
                   prompt = (
                       "Summarize this news article in 110-160 words. "
-                      "The summary MUST contain at least 120 words and "
+                      "The summary MUST contain at least 110 words and "
                       "no more than 160 words. Count the words before "
                       "responding and revise if necessary. "
                       "Be factual, clear and concise. Do not invent facts. "
