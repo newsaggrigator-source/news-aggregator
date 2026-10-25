@@ -282,6 +282,7 @@ jobs:
 
               # 1. محاولة Markdown (كامل أو جزئي): [..](url) أو [..](url "title")
               md_matches = re.findall(r'\[(https?://[^\]]+)\]\(https?://[^)\s]+\)', text)
+              print("MARKDOWN MATCHES:", repr(md_matches))
               if md_matches:
                   return _validate_url(md_matches[0])
 
