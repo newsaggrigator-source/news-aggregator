@@ -281,7 +281,7 @@ jobs:
               text = raw_url.strip()
 
               # 1. محاولة Markdown (كامل أو جزئي): [..](url) أو [..](url "title")
-              md_matches = re.findall(r'\]\(\s*(https?://[^)\s]+)', text)
+              md_matches = re.findall(r'\[(https?://[^\]]+)\]\(https?://[^)\s]+\)', text)
               if md_matches:
                   return _validate_url(md_matches[0])
 
