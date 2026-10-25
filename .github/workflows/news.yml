@@ -510,7 +510,7 @@ jobs:
                       continue
 
                   prompt = (
-                      "Summarize this news article in 120-160 words. "
+                      "Summarize this news article in 110-160 words. "
                       "The summary MUST contain at least 120 words and "
                       "no more than 160 words. Count the words before "
                       "responding and revise if necessary. "
@@ -563,7 +563,7 @@ jobs:
                       )
 
                       if (
-                          word_count >= 120
+                          word_count >= 110
                           and not candidate.startswith(("عذرًا", "عذراً"))
                       ):
                           summary = candidate
