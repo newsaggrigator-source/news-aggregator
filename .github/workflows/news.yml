@@ -109,12 +109,12 @@ jobs:
                       safe_url = urllib.parse.quote(url, safe=":/?=&%")
                       for attempt in range(3):
                           try:
-                             data = urllib.request.urlopen(safe_url, timeout=20).read()
-                             break
-                         except Exception:
-                             if attempt == 2:
-                                 raise
-                             time.sleep(2)
+                              data = urllib.request.urlopen(safe_url, timeout=20).read()
+                              break
+                          except Exception:
+                              if attempt == 2:
+                                  raise
+                              time.sleep(2)
 
                       root = ET.fromstring(data)
 
