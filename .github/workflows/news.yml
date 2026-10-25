@@ -285,7 +285,9 @@ jobs:
               md_matches = re.findall(r'\[(https?://[^\]]+)\]\(https?://[^)\s]+\)', text)
               print("MARKDOWN MATCHES:", repr(md_matches))
               if md_matches:
-                  return _validate_url(md_matches[0])
+                  return _validate_url(
+                      re.search(r'https?://[^\s\]\)]+', md_matches[0]).group(0)
+                  )
 
               # 2. إذا كان النص نفسه رابطًا نظيفًا
               if text.startswith(("http://", "https://")):
