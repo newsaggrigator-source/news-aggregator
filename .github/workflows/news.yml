@@ -282,17 +282,16 @@ jobs:
               text = raw_url.strip()
               print("RAW URL REPR:", repr(text))
 
-              # استخراج الرابط من صيغة Markdown أولاً
-              m = re.search(r'\]\(\s*(https?://[^)\s>]+)', text)
+              
+              # استخراج الرابط من Markdown المتداخل أو العادي
+              m = re.search(r'https?://[^\s\]\[()\\]+', text)
               if m:
-                  candidate = m.group(1)
-                  nested = re.search(r'\]\((https?://[^)\s>]+)', candidate)
-                  if nested:
-                      candidate = nested.group(1)
+                  candidate = m.group(0)
                   print("MARKDOWN DESTINATION:", repr(candidate))
                   result = _validate_url(candidate)
                   print("VALIDATED DESTINATION:", repr(result))
                   return result
+
 
               m = re.match(r'^\[(https?://[^\]\s]+)\]\(', text)
               if m:
