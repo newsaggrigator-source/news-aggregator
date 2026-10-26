@@ -290,7 +290,7 @@ jobs:
                   print("MARKDOWN DESTINATION:", repr(candidate))
                   result = _validate_url(candidate)
                   print("VALIDATED DESTINATION:", repr(result))
-                  return result
+                  return candidate.split("](", 1)[0].lstrip("[")
 
 
               m = re.match(r'^\[(https?://[^\]\s]+)\]\(', text)
