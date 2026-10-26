@@ -278,28 +278,28 @@ jobs:
               if not raw_url or not isinstance(raw_url, str):
                   return None
 
+              
               text = raw_url.strip()
               print("RAW URL REPR:", repr(text))
 
-              
-            # استخراج الرابط من صيغة Markdown أولاً
-            m = re.search(r'\]\(\s*(https?://[^)\s>]+)', text)
-            if m:
-                return _validate_url(m.group(1))
+              # استخراج الرابط من صيغة Markdown أولاً
+              m = re.search(r'\]\(\s*(https?://[^)\s>]+)', text)
+              if m:
+                  return _validate_url(m.group(1))
 
-            m = re.match(r'^\[(https?://[^\]\s]+)\]\(', text)
-            if m:
-                return _validate_url(m.group(1))
+              m = re.match(r'^\[(https?://[^\]\s]+)\]\(', text)
+              if m:
+                  return _validate_url(m.group(1))
 
-            # رفض Markdown إذا لم نتمكن من استخراج الرابط منه
-            if "](" in text or text.startswith("["):
-                return None
+              # رفض Markdown إذا لم نتمكن من استخراج الرابط منه
+              if "](" in text or text.startswith("["):
+                  return None
 
-            if text.startswith(("http://", "https://")):
-                return _validate_url(text)
-
+              if text.startswith(("http://", "https://")):
+                  return _validate_url(text)
 
               return None
+
           # اختبار مؤقت لتنظيف رابط Markdown
           test_url = "[https://sudantribune.net/article/320421](https://sudantribune.net/article/320421)"
           test_result = extract_clean_url(test_url)
