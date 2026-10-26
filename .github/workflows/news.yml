@@ -285,7 +285,10 @@ jobs:
               # استخراج الرابط من صيغة Markdown أولاً
               m = re.search(r'\]\(\s*(https?://[^)\s>]+)', text)
               if m:
-                  return _validate_url(m.group(1))
+                  print("MARKDOWN DESTINATION:", repr(m.group(1)))
+                  result = _validate_url(m.group(1))
+                  print("VALIDATED DESTINATION:", repr(result))
+                  return result
 
               m = re.match(r'^\[(https?://[^\]\s]+)\]\(', text)
               if m:
