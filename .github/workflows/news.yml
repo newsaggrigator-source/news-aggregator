@@ -311,7 +311,9 @@ jobs:
           test_result = extract_clean_url(test_url)
           print("CLEANER TEST OUTPUT:", repr(test_result))
           print("CLEANER TEST TYPE:", type(test_result).__name__)
-          print("CLEANER TEST PASS:", test_result == "https://sudantribune.net/article/320421")
+          print("EXPECTED:", repr("https://sudantribune.net/article/320421"))
+          print("ACTUAL:", repr(test_result))
+          print("EQUAL:", test_result == "https://sudantribune.net/article/320421")
           # ============================================================
           # تحميل البيانات
           # ============================================================
