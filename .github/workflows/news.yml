@@ -284,8 +284,7 @@ jobs:
               # 1. استخراج أول رابط HTTP/HTTPS من النص
               m = re.search(r'https?://[^\s\]\)\\]+', text)
               if m:
-                  return _validate_url(m.group(0).rstrip(".,;:"))
-
+                  return _validate_url(m.group(0).lstrip("[").rstrip(".,;:"))
               # 2. إذا كان النص نفسه رابطًا نظيفًا
               if text.startswith(("http://", "https://")):
                   return _validate_url(text)
