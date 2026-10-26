@@ -281,13 +281,10 @@ jobs:
               text = raw_url.strip()
               print("RAW URL REPR:", repr(text))
 
-              # 1. محاولة Markdown (كامل أو جزئي): [..](url) أو [..](url "title")
-              md_matches = re.findall(r'\[(https?://[^\]]+)\]\(https?://[^)\s]+\)', text)
-              print("MARKDOWN MATCHES:", repr(md_matches))
-              if md_matches:
-                  m = re.search(r'https?://[^)\s]+', text)
-                  if m:
-                       return _validate_url(m.group(0).rstrip("]"))
+              # 1. استخراج الرابط من صيغة Markdown
+              m = re.search(r'\[(https?://[^\]]+)\]\(https?://[^)\s]+\)', text)
+              if m:
+                  return _validate_url(m.group(1).replace(r'\]', '').replace(r'\(', '(').replace(r'\)', ')'))
 
               # 2. إذا كان النص نفسه رابطًا نظيفًا
               if text.startswith(("http://", "https://")):
