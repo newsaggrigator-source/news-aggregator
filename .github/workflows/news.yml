@@ -347,6 +347,7 @@ jobs:
               for article in articles:
                   url = article.get("link", "")
                   original_google_url = url  # نحتفظ به كـ fallback
+                  print("ARTICLE URL CHECK:", category, repr(url), article.get("title", "")[:60])
 
                   # ---------- فك تشفير روابط Google News ----------
                   if "news.google.com" in url.lower():
