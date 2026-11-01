@@ -380,6 +380,7 @@ jobs:
 
                   # ---------- التحقق النهائي قبل الطلب ----------
                   if not url:
+                      print("EMPTY ARTICLE LINK:", category, article.get("title", ""))
                       article["content"] = ""
                       continue
 
