@@ -221,10 +221,12 @@ jobs:
               recent_articles.sort(key=lambda x: x[0], reverse=True)
               fallback_articles.sort(key=lambda x: x[0], reverse=True)
 
-              selected = recent_articles[:10]
-
-              if len(selected) < 10:
-                  remaining = 10 - len(selected)
+              limit = 20 if country == "sudan" else 10
+              
+              selected = recent_articles[:limit]
+              
+              if len(selected) < limit:
+                  remaining = limit - len(selected)
                   selected.extend(fallback_articles[:remaining])
 
               result[country] = [
