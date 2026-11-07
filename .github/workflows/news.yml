@@ -221,7 +221,7 @@ jobs:
               recent_articles.sort(key=lambda x: x[0], reverse=True)
               fallback_articles.sort(key=lambda x: x[0], reverse=True)
 
-              limit = 20 if country == "sudan" else 10
+              limit = 20 if country in ("sudan", "football") else 10
               
               selected = recent_articles[:limit]
               
