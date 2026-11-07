@@ -508,6 +508,18 @@ jobs:
           skipped_saved = 0
           skipped_no_content = 0
           skipped_no_api_key = 0
+          
+          stats = {}
+          
+          for category in data:
+              stats[category] = {
+                   "saved": 0,
+                   "no_content": 0,
+                   "no_api_key": 0,
+                   "created": 0,
+                   "rejected": 0,
+                   "error": 0
+             }
 
           for category, articles in data.items():
               for article in articles:
@@ -521,21 +533,25 @@ jobs:
                   if isinstance(old, dict) and old.get("summary"):
                       article["summary"] = old["summary"]
                       skipped_saved += 1
+                      stats[category]["saved"] += 1
                       continue
 
                   if isinstance(old, str) and old.strip():
                       article["summary"] = old
                       skipped_saved += 1
+                      stats[category]["saved"] += 1
                       continue
 
                   content = article.get("content", "").strip()
 
                   if not content:
                       skipped_no_content += 1
+                      stats[category]["no_content"] += 1
                       continue
 
                   if not api_key:
                       skipped_no_api_key += 1
+                      stats[category]["no_api_key"] += 1
                       continue
 
                   prompt = (
@@ -611,17 +627,20 @@ jobs:
                           }
                           article["summary"] = summary
                           new_count += 1
+                          stats[category]["created"] += 1
                           print(
                               "Summary created:",
                               article.get("title", "")[:80]
                           )
                       else:
+                          stats[category]["rejected"] += 1
                           print(
                               "Summary rejected:",
                               article.get("title", "")[:80]
                           )
 
                   except Exception as e:
+                      stats[category]["error"] += 1
                       print(
                           "Summary error:",
                           article.get("title", "")[:80],
@@ -644,6 +663,8 @@ jobs:
                   len(data[category])
               )
 
+          for category, counts in stats.items():
+             print(f"{category} SUMMARY DETAILS: {counts}")
           with open("news.json", "w", encoding="utf-8") as f:
               json.dump(data, f, ensure_ascii=False, indent=2)
           print("New summaries created:", new_count)
