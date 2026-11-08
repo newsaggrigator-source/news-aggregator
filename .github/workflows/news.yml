@@ -400,16 +400,14 @@ jobs:
                           headers={"User-Agent": "Mozilla/5.0"}
                       )
 
-                      with urllib.request.urlopen(request, timeout=20) as response:
-                      print("ALQUDS HTML IMAGE CHECK:", "og:image" in html, "twitter:image" in html, len(html))
+                       with urllib.request.urlopen(request, timeout=20) as response:
                           html = response.read().decode(
-                              response.headers.get_content_charset() or "utf-8",
-                              errors="replace"
-                          )
-                          final_url = response.geturl()
-
-                      if "news.google.com" in url.lower():
-                          url = final_url
+                             response.headers.get_content_charset() or "utf-8",
+                             errors="replace"
+                        )
+                         final_url = response.geturl()
+                      
+                        print("ALQUDS HTML IMAGE CHECK:", "og:image" in html, "twitter:image" in html, len(html))
 
                       # ---------- استخراج صورة الخبر ----------
                       image_url = article.get("image", "")
