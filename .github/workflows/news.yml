@@ -27,7 +27,6 @@ jobs:
           import urllib.parse
           import xml.etree.ElementTree as ET
           import json
-          import time
           from html.parser import HTMLParser
           from datetime import datetime, timezone
           from email.utils import parsedate_to_datetime
@@ -114,11 +113,7 @@ jobs:
                       safe_url = urllib.parse.quote(url, safe=":/?=&%")
                       for attempt in range(3):
                           try:
-                              request = urllib.request.Request(
-                                safe_url,
-                                headers={"User-Agent": "Mozilla/5.0"}
-                              )
-                              data = urllib.request.urlopen(request, timeout=20).read()
+                              data = urllib.request.urlopen(safe_url, timeout=20).read()
                               break
                           except Exception:
                               if attempt == 2:
@@ -226,7 +221,7 @@ jobs:
               recent_articles.sort(key=lambda x: x[0], reverse=True)
               fallback_articles.sort(key=lambda x: x[0], reverse=True)
 
-              limit = 20 if country in ("sudan", "football") else 10
+              limit = 20 if country == "sudan" else 10
               
               selected = recent_articles[:limit]
               
@@ -274,32 +269,44 @@ jobs:
               return None
 
           def extract_clean_url(raw_url):
-             if not raw_url or not isinstance(raw_url, str):
+              """
+              يستخرج رابط HTTP/HTTPS خام من نص قد يكون:
+              - رابطًا نظيفًا: https://...
+              - Markdown: [text](https://...)
+              - Markdown بعنوان: [text](https://... "title")
+              - نص مختلط يحتوي رابطًا في أي مكان
+              يُرجع None إذا لم يجد رابطًا صالحًا.
+              """
+              if not raw_url or not isinstance(raw_url, str):
                   return None
-             
-             text = raw_url.strip().replace("\\", "")
-             
-             m = re.search(r'https?://[^\s\]\[()<>"]+', text, re.IGNORECASE)
-             
-             if m:
-                 candidate = m.group(0).rstrip(".,;")
-                 print("EXTRACTED URL:", repr(candidate))
-                 result = _validate_url(candidate)
-                 print("VALIDATED URL:", repr(result))
-                 return result
-                 
-             return None
+
+              
+              text = raw_url.strip()
+              print("RAW URL REPR:", repr(text))
+
+              
+              # استخراج الرابط من Markdown المتداخل أو العادي
+              m = re.search(r'https?://[^\s\]\[()\\]+(?=[\])\s]|$)', text)
+              if m:
+                  candidate = m.group(0)
+                  print("MARKDOWN DESTINATION:", repr(candidate))
+                  result = _validate_url(candidate)
+                  print("VALIDATED DESTINATION:", repr(result))
+                  return result
 
 
-          # اختبار مؤقت لتنظيف رابط Markdown
-          test_url = "[https://sudantribune.net/article/320421](https://sudantribune.net/article/320421)"
-          test_result = extract_clean_url(test_url)
-          print("CLEANER TEST OUTPUT:", repr(test_result))
-          print("CLEANER TEST TYPE:", type(test_result).__name__)
-          print("EXPECTED:", repr("https://sudantribune.net/article/320421"))
-          print("ACTUAL:", repr(test_result))
-          print("EQUAL:", test_result == "https://sudantribune.net/article/320421")
-          # ==================================================
+              m = re.match(r'^\[(https?://[^\]\s]+)\]\(', text)
+              if m:
+                  return _validate_url(m.group(1))
+
+              # رفض Markdown إذا لم نتمكن من استخراج الرابط منه
+              if "](" in text or text.startswith("["):
+                  return None
+
+              if text.startswith(("http://", "https://")):
+                  return _validate_url(text)
+
+              return None
 
           # اختبار مؤقت لتنظيف رابط Markdown
           test_url = "[https://sudantribune.net/article/320421](https://sudantribune.net/article/320421)"
@@ -399,7 +406,7 @@ jobs:
                           url,
                           headers={"User-Agent": "Mozilla/5.0"}
                       )
-                    
+
                       with urllib.request.urlopen(request, timeout=20) as response:
                           html = response.read().decode(
                               response.headers.get_content_charset() or "utf-8",
@@ -407,10 +414,8 @@ jobs:
                           )
                           final_url = response.geturl()
 
-                      print("ALQUDS HTML IMAGE CHECK:", "og:image" in html, "twitter:image" in html, len(html))
-                      print("ALQUDS OG TAGS:", re.findall(r'<meta[^>]+(?:og:image|twitter:image)[^>]*>', html, re.IGNORECASE)[:10])
-                      for match in re.finditer(r'<meta\b[^>]*og:image[^>]*>', html, re.IGNORECASE):
-                          print("ALQUDS OG IMAGE TAG:", match.group(0)[:1000])
+                      if "news.google.com" in url.lower():
+                          url = final_url
 
                       # ---------- استخراج صورة الخبر ----------
                       image_url = article.get("image", "")
@@ -425,15 +430,12 @@ jobs:
                               image_match = re.search(pattern, html, re.IGNORECASE)
                               if image_match:
                                   image_url = image_match.group(1).strip()
-                                  image_url = extract_clean_url(image_url) or image_url
                                   break
 
                       article["image"] = "" if any(
                           word in image_url.lower()
                           for word in ("logo", "favicon", "site-icon", "masthead", "brand")
                       ) else image_url
-
-                      print("FINAL IMAGE VALUE:", repr(article["image"]))
 
                       # ---------- استخراج النص ----------
                       parser = TextParser()
@@ -506,18 +508,6 @@ jobs:
           skipped_saved = 0
           skipped_no_content = 0
           skipped_no_api_key = 0
-          
-          stats = {}
-          
-          for category in data:
-              stats[category] = {
-                   "saved": 0,
-                   "no_content": 0,
-                   "no_api_key": 0,
-                   "created": 0,
-                   "rejected": 0,
-                   "error": 0
-             }
 
           for category, articles in data.items():
               for article in articles:
@@ -531,25 +521,21 @@ jobs:
                   if isinstance(old, dict) and old.get("summary"):
                       article["summary"] = old["summary"]
                       skipped_saved += 1
-                      stats[category]["saved"] += 1
                       continue
 
                   if isinstance(old, str) and old.strip():
                       article["summary"] = old
                       skipped_saved += 1
-                      stats[category]["saved"] += 1
                       continue
 
                   content = article.get("content", "").strip()
 
                   if not content:
                       skipped_no_content += 1
-                      stats[category]["no_content"] += 1
                       continue
 
                   if not api_key:
                       skipped_no_api_key += 1
-                      stats[category]["no_api_key"] += 1
                       continue
 
                   prompt = (
@@ -625,20 +611,17 @@ jobs:
                           }
                           article["summary"] = summary
                           new_count += 1
-                          stats[category]["created"] += 1
                           print(
                               "Summary created:",
                               article.get("title", "")[:80]
                           )
                       else:
-                          stats[category]["rejected"] += 1
                           print(
                               "Summary rejected:",
                               article.get("title", "")[:80]
                           )
 
                   except Exception as e:
-                      stats[category]["error"] += 1
                       print(
                           "Summary error:",
                           article.get("title", "")[:80],
@@ -661,8 +644,6 @@ jobs:
                   len(data[category])
               )
 
-          for category, counts in stats.items():
-             print(f"{category} SUMMARY DETAILS: {counts}")
           with open("news.json", "w", encoding="utf-8") as f:
               json.dump(data, f, ensure_ascii=False, indent=2)
           print("New summaries created:", new_count)
