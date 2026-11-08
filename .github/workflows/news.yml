@@ -296,7 +296,7 @@ jobs:
               # استخراج عنوان URL من Markdown
               m = re.search(r'\]\((https?://[^)\s]+)', text)
               if m:
-                 candidate = m.group(0)
+                 candidate = m.group(1)
                  print("MARKDOWN DESTINATION:", repr(candidate))
                  result = _validate_url(candidate)
                  print("VALIDATED DESTINATION:", repr(result))
