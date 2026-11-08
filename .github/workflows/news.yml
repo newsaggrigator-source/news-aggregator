@@ -401,6 +401,7 @@ jobs:
                       )
 
                       with urllib.request.urlopen(request, timeout=20) as response:
+                      print("ALQUDS HTML IMAGE CHECK:", "og:image" in html, "twitter:image" in html, len(html))
                           html = response.read().decode(
                               response.headers.get_content_charset() or "utf-8",
                               errors="replace"
