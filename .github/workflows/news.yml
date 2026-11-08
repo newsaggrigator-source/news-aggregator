@@ -290,19 +290,18 @@ jobs:
               print("RAW URL REPR:", repr(text))
 
               
-              # استخراج الرابط من Markdown المتداخل أو العادي
-              m = re.search(r'https?://[^\s\]\[()\\]+(?=[\])\s]|$)', text)
+              # إزالة علامات الهروب قبل استخراج الرابط
+              text = text.replace("\\", "")
+              
+              # استخراج عنوان URL من Markdown
+              m = re.search(r'https?://[^\s\]\[()]+', text)
               if m:
-                  candidate = m.group(0)
-                  print("MARKDOWN DESTINATION:", repr(candidate))
-                  result = _validate_url(candidate)
-                  print("VALIDATED DESTINATION:", repr(result))
-                  return result
+                 candidate = m.group(0)
+                 print("MARKDOWN DESTINATION:", repr(candidate))
+                 result = _validate_url(candidate)
+                 print("VALIDATED DESTINATION:", repr(result))
+                 return result
 
-
-              m = re.match(r'^\[(https?://[^\]\s]+)\]\(', text)
-              if m:
-                  return _validate_url(m.group(1))
 
               # رفض Markdown إذا لم نتمكن من استخراج الرابط منه
               if "](" in text or text.startswith("["):
