@@ -408,6 +408,8 @@ jobs:
                           final_url = response.geturl()
 
                       print("ALQUDS HTML IMAGE CHECK:", "og:image" in html, "twitter:image" in html, len(html))
+                      for match in re.finditer(r'<meta\b[^>]*og:image[^>]*>', html, re.IGNORECASE):
+                          print("ALQUDS OG IMAGE TAG:", match.group(0)[:1000])
 
                       # ---------- استخراج صورة الخبر ----------
                       image_url = article.get("image", "")
