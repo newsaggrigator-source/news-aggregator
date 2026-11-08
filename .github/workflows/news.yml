@@ -274,44 +274,32 @@ jobs:
               return None
 
           def extract_clean_url(raw_url):
-              """
-              يستخرج رابط HTTP/HTTPS خام من نص قد يكون:
-              - رابطًا نظيفًا: https://...
-              - Markdown: [text](https://...)
-              - Markdown بعنوان: [text](https://... "title")
-              - نص مختلط يحتوي رابطًا في أي مكان
-              يُرجع None إذا لم يجد رابطًا صالحًا.
-              """
-              if not raw_url or not isinstance(raw_url, str):
+             if not raw_url or not isinstance(raw_url, str):
                   return None
-
-              
-              text = raw_url.strip()
-              candidate = text.split("](", 1)[1].split(")", 1)[0]
-              print("RAW URL REPR:", repr(text))
-
-              
-              # إزالة علامات الهروب
-              text = text.replace("\\", "")
-              
-              # استخراج أول رابط HTTP/HTTPS من النص
-              m = re.search(r'https?://[^\s\]\[()]+', text)
-              if m:
-                 candidate = m.group(0)
+             
+             text = raw_url.strip().replace("\\", "")
+             
+             m = re.search(r'https?://[^\s\]\[()<>"]+', text, re.IGNORECASE)
+             
+             if m:
+                 candidate = m.group(0).rstrip(".,;")
                  print("EXTRACTED URL:", repr(candidate))
                  result = _validate_url(candidate)
                  print("VALIDATED URL:", repr(result))
                  return result
+                 
+             return None
 
 
-              # رفض Markdown إذا لم نتمكن من استخراج الرابط منه
-              if "](" in text or text.startswith("["):
-                  return None
-
-              if text.startswith(("http://", "https://")):
-                  return _validate_url(text)
-
-              return None
+          # اختبار مؤقت لتنظيف رابط Markdown
+          test_url = "[https://sudantribune.net/article/320421](https://sudantribune.net/article/320421)"
+          test_result = extract_clean_url(test_url)
+          print("CLEANER TEST OUTPUT:", repr(test_result))
+          print("CLEANER TEST TYPE:", type(test_result).__name__)
+          print("EXPECTED:", repr("https://sudantribune.net/article/320421"))
+          print("ACTUAL:", repr(test_result))
+          print("EQUAL:", test_result == "https://sudantribune.net/article/320421")
+          # ==================================================
 
           # اختبار مؤقت لتنظيف رابط Markdown
           test_url = "[https://sudantribune.net/article/320421](https://sudantribune.net/article/320421)"
