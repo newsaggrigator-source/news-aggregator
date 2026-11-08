@@ -425,6 +425,7 @@ jobs:
                               image_match = re.search(pattern, html, re.IGNORECASE)
                               if image_match:
                                   image_url = image_match.group(1).strip()
+                                  image_url = extract_clean_url(image_url) or image_url
                                   break
 
                       article["image"] = "" if any(
