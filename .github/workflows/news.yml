@@ -432,6 +432,8 @@ jobs:
                           for word in ("logo", "favicon", "site-icon", "masthead", "brand")
                       ) else image_url
 
+                      print("FINAL IMAGE VALUE:", repr(article["image"]))
+
                       # ---------- استخراج النص ----------
                       parser = TextParser()
                       parser.feed(html)
