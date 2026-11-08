@@ -287,6 +287,7 @@ jobs:
 
               
               text = raw_url.strip()
+              candidate = text.split("](", 1)[1].split(")", 1)[0]
               print("RAW URL REPR:", repr(text))
 
               
@@ -317,7 +318,6 @@ jobs:
           test_result = extract_clean_url(test_url)
           print("CLEANER TEST OUTPUT:", repr(test_result))
           print("CLEANER TEST TYPE:", type(test_result).__name__)
-          candidate = text.split("](", 1)[1].split(")", 1)[0]
           print("EXPECTED:", repr("https://sudantribune.net/article/320421"))
           print("ACTUAL:", repr(test_result))
           print("EQUAL:", test_result == "https://sudantribune.net/article/320421")
