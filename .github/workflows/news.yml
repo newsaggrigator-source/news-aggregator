@@ -114,7 +114,11 @@ jobs:
                       safe_url = urllib.parse.quote(url, safe=":/?=&%")
                       for attempt in range(3):
                           try:
-                              data = urllib.request.urlopen(safe_url, timeout=20).read()
+                              request = urllib.request.Request(
+                                safe_url,
+                                headers={"User-Agent": "Mozilla/5.0"}
+                              )
+                              data = urllib.request.urlopen(request, timeout=20).read()
                               break
                           except Exception:
                               if attempt == 2:
