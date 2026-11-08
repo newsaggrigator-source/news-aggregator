@@ -294,7 +294,7 @@ jobs:
               text = text.replace("\\", "")
               
               # استخراج عنوان URL من Markdown
-              m = re.search(r'https?://[^\s\]\[()]+', text)
+              m = re.search(r'\]\((https?://[^)\s]+)', text)
               if m:
                  candidate = m.group(0)
                  print("MARKDOWN DESTINATION:", repr(candidate))
